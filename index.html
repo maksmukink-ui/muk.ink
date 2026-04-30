@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMM Майстер — Курс із соціальних мереж</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface2: #1c1c26;
+  --border: rgba(255,255,255,0.08);
+  --text: #f0eff8;
+  --muted: #7a798f;
+  --accent1: #7c6bff;
+  --accent2: #00d4aa;
+  --accent3: #ff6b6b;
+  --accent4: #ffd166;
+  --accent5: #06b6d4;
+  --font-display: 'Unbounded', sans-serif;
+  --font-body: 'Manrope', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* NOISE OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,107,255,0.15) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: pulse 6s ease-in-out infinite;
+}
+.hero-glow2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,212,170,0.1) 0%, transparent 70%);
+  top: 30%; right: 10%;
+  pointer-events: none;
+  animation: pulse 8s ease-in-out infinite reverse;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:translate(-50%,-50%) scale(1)} 50%{opacity:0.7;transform:translate(-50%,-50%) scale(1.1)} }
+.hero-tag {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  border: 1px solid rgba(0,212,170,0.3);
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 2rem;
+  display: inline-block;
+  animation: fadeUp 0.6s ease both;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+.hero h1 span { color: var(--accent1); }
+.hero p {
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+.hero-stats {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+.hero-stat { text-align: center; }
+.hero-stat .num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  display: block;
+}
+.hero-stat .label { font-size: 12px; color: var(--muted); }
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s ease-in-out infinite;
+  color: var(--muted);
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--muted), transparent);
+}
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-8px)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* NAV */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 56px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent1);
+  white-space: nowrap;
+  margin-right: auto;
+}
+.nav a {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+.nav a:hover { color: var(--text); }
+
+/* MAIN CONTENT */
+.container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+section { padding: 5rem 0; }
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent1);
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+/* ROADMAP */
+.roadmap { position: relative; padding: 3rem 0; }
+.roadmap-line {
+  position: absolute;
+  left: 24px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--border) 10%, var(--border) 90%, transparent);
+}
+
+/* MODULE CARDS */
+.module {
+  position: relative;
+  padding-left: 64px;
+  margin-bottom: 2rem;
+}
+.module-dot {
+  position: absolute;
+  left: 16px;
+  top: 24px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--bg);
+  z-index: 1;
+}
+.module-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.module-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+.module-header {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+.module-num {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+  min-width: 28px;
+}
+.module-info { flex: 1; }
+.module-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
+}
+.module-sub { font-size: 12px; color: var(--muted); }
+.module-weeks {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: var(--surface2);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.module-chevron {
+  color: var(--muted);
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+.module-chevron.open { transform: rotate(180deg); }
+
+.module-body { display: none; padding: 0 24px 24px; }
+.module-body.open { display: block; }
+
+/* TOPIC PILLS */
+.topics { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.topic-pill {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: var(--surface2);
+  transition: all 0.2s;
+}
+.topic-pill:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+/* SCHEMA BOXES */
+.schema-box {
+  background: var(--surface2);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  border-left: 3px solid;
+}
+.schema-box-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.formula {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  background: rgba(0,0,0,0.3);
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin: 6px 0;
+  display: inline-block;
+  color: var(--accent2);
+}
+.formula-block { display: flex; flex-direction: column; gap: 4px; }
+
+/* MINI CARDS GRID */
+.mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.mini-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.mini-card-title { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+.mini-card-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* TIPS */
+.tip-list { display: flex; flex-direction: column; gap: 10px; }
+.tip-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.tip-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.tip-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.tip-text strong { color: var(--text); font-weight: 600; }
+
+/* BAR CHART */
+.bar-chart { display: flex; flex-direction: column; gap: 8px; }
+.bar-row { display: flex; align-items: center; gap: 10px; }
+.bar-label { font-size: 12px; color: var(--muted); min-width: 80px; text-align: right; }
+.bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; }
+.bar-fill { height: 100%; border-radius: 4px; }
+.bar-value { font-size: 11px; color: var(--muted); min-width: 70px; }
+
+/* COMPARISON GRID */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.compare-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+}
+.compare-title { font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+.compare-items { display: flex; flex-direction: column; gap: 4px; }
+.compare-item { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.compare-item::before { content: '→ '; color: var(--accent1); }
+
+/* CRISIS STAGES */
+.stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+.stage-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+.stage-name { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.stage-items { font-size: 10px; color: var(--muted); line-height: 1.6; }
+
+/* MEDIA TYPES */
+.media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.media-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+.media-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.media-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* METHODS SECTION */
+.methods { padding: 4rem 0; }
+.methods-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 2rem; }
+.method-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 20px;
+  transition: all 0.2s;
+}
+.method-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); }
+.method-icon {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  display: block;
+}
+.method-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.method-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+footer span { color: var(--accent1); }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 2rem 0; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .stages { grid-template-columns: repeat(2, 1fr); }
+  .compare-grid { grid-template-columns: 1fr; }
+  .media-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-tag">SMM Сертифікація — Повний курс</div>
+  <h1>Стань майстром<br><span>соціальних мереж</span></h1>
+  <p>7 модулів, реальні схеми та підходи. Від стратегії до аналітики — все що потрібно для сертифікації.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="num">7</span><span class="label">Модулів</span></div>
+    <div class="hero-stat"><span class="num">12</span><span class="label">Тижнів</span></div>
+    <div class="hero-stat"><span class="num">70+</span><span class="label">Тем</span></div>
+    <div class="hero-stat"><span class="num">100%</span><span class="label">Практика</span></div>
+  </div>
+  <div class="scroll-hint">Гортай вниз</div>
+</section>
+
+<nav class="nav">
+  <div class="nav-logo">SMM МАЙСТЕР</div>
+  <a href="#m1">Стратегія</a>
+  <a href="#m2">Контент</a>
+  <a href="#m3">Аналітика</a>
+  <a href="#m4">Прослуховування</a>
+  <a href="#m5">Інфлюенсери</a>
+  <a href="#m6">Кризи</a>
+  <a href="#m7">Бренд</a>
+  <a href="#methods">Методи</a>
+</nav>
+
+<div class="container">
+
+  <section>
+    <div class="section-label">Програма курсу</div>
+    <h2 class="section-title">7 модулів<br>від основ до профі</h2>
+    <p style="color: var(--muted); max-width: 500px;">Натисни на модуль щоб розкрити теми, схеми та формули. Проходь послідовно.</p>
+  </section>
+
+  <div class="roadmap">
+    <div class="roadmap-line"></div>
+
+    <!-- MODULE 1 -->
+    <div class="module" id="m1">
+      <div class="module-dot" style="border-color: #7c6bff; box-shadow: 0 0 12px rgba(124,107,255,0.4);"></div>
+      <div class="module-card">
+        <div class="module-header" onclick="toggleModule(this)">
+          <div class="module-num">01</div>
+          <div class="module-info">
+            <div class="module-title" style="color: #7c6bff;">Стратегія та основи</div>
+            <div class="module-sub">S.M.A.R.T. цілі · Buyer Persona · Аудит · Inbound</div>
+          </div>
+          <div class="module-weeks">Тижні 1–2</div>
+          <div class="module-chevron">▼</div>
+        </div>
+        <div class="module-body">
+          <div class="topics">
+            <span class="topic-pill">Навіщо стратегія?</span>
+            <span class="topic-pill">Buyer Persona</span>
+            <span class="topic-pill">S.M.A.R.T. цілі</span>
+            <span class="topic-pill">Соціальний аудит</span>
+            <span class="topic-pill">5 моделей SMM</span>
+            <span class="topic-pill">Inbound методологія</span>
+          </div>
+
+          <div class="schema-box" style="border-color: #7c6bff;">
+            <div class="schema-box-title" style="color: #7c6bff;">Схема: S.M.A.R.T. ціль</div>
+            <div class="formula-block">
+              <div class="formula">S — Specific: "Зростання підписників в Instagram"</div>
+              <div class="formula">M — Measurable: "на 15%"</div>
+              <div class="formula">A — Attainable: "через щоденний контент"</div>
+              <div class="formula">R — Relevant: "збільшує ліди для бізнесу"</div>
+              <div class="formula">T — Timely: "за 3 місяці"</div>
+            </div>
+          </div>
+
+          <div class="schema-box" style="border-color: #7c6bff;">
+            <div class="schema-box-title" style="color: #7c6bff;">Inbound методологія</div>
+            <div class="mini-grid">
+              <div class="mini-card">
+                <div class="mini-card-title" style="color: #7c6bff;">Attract</div>
+                <div class="mini-card-desc">Публікації для охоплення нової аудиторії</div>
+              </div>
+              <div class="mini-card">
+                <div class="mini-card-title" style="color: #00d4aa;">Engage</div>
+                <div class="mini-card-desc">Взаємодія з лідами, відповіді на питання</div>
+              </div>
+              <div class="mini-card">
+                <div class="mini-card-title" style="color: #ffd166;">Delight</div>
+                <div class="mini-card-desc">Підтримка клієнтів, спільнота</div>
+              </div>
+            </div>
+            <p style="font-size: 12px; color: var(--muted);">⚡ Соціальний контент використовується на ВСІХ трьох етапах — не тільки Attract і Delight!</p>
+          </div>
+
+          <div class="schema-box" style="border-color: #7c6bff;">
+            <div class="schema-box-title" style="color: #7c6bff;">5 організаційних моделей SMM</div>
+            <div class="mini-grid">
+              <div class="mini-card"><div class="mini-card-title">Centralized</div><div class="mini-card-desc">Один відділ керує всім</div></div>
+              <div class="mini-card"><div class="mini-card-title">Distributed</div><div class="mini-card-desc">Кожен відділ — свої акаунти</div></div>
+              <div class="mini-card"><div class="mini-card-title">Dandelion</div><div class="mini-card-desc">Центр + незалежні філії</div></div>
+              <div class="mini-card"><div class="mini-card-title">Hub & Spoke</div><div class="mini-card-desc">Центр координує відділи</div></div>
+            </div>
+            <p style="font-size: 12px; color: var(--accent3);">❌ "Holistic" — НЕ є одним із п'яти стандартних типів!</p>
+          </div>
+
+          <div class="tip-list">
+            <div class="tip-item"><div class="tip-icon">✦</div><div class="tip-text"><strong>Практика:</strong> Напиши 3 S.M.A.R.T. цілі для уявного бренду (кафе, магазин, блог).</div></div>
+            <div class="tip-item"><div class="tip-icon">✦</div><div class="tip-text"><strong>Практика:</strong> Знайди реальний бренд і проведи міні-аудит: які платформи, частота, тон.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2 -->
+    <div class="module" id="m2">
+      <div class="module-dot" style="border-color: #00d4aa; box-shadow: 0 0 12px rgba(0,212,170,0.4);"></div>
+      <div class="module-card">
+        <div class="module-header" onclick="toggleModule(this)">
+          <div class="module-num">02</div>
+          <div class="module-info">
+            <div class="module-title" style="color: #00d4aa;">Контент та платформи</div>
+            <div class="module-sub">Правило 80/20 · Stories · UGC · Хештеги · Real-time</div>
+          </div>
+          <div class="module-weeks">Тижні 3–4</div>
+          <div class="module-chevron">▼</div>
+        </div>
+        <div class="module-body">
+          <div class="topics">
+            <span class="topic-pill">Правило 80/20</span>
+            <span class="topic-pill">Curated content</span>
+            <span class="topic-pill">Частота публікацій</span>
+            <span class="topic-pill">Ephemeral Stories</span>
+            <span class="topic-pill">Real-time marketing</span>
+            <span class="topic-pill">UGC</span>
+            <span class="topic-pill">Хештеги</span>
+          </div>
+
+          <div class="schema-box" style="border-color: #00d4aa;">
+            <div class="schema-box-title" style="color: #00d4aa;">Правило 80/20</div>
+            <div style="display: flex; gap: 12px; align-items: stretch;">
+              <div style="flex: 4; background: rgba(0,212,170,0.1); border-radius: 8px; padding: 14px; border: 1px solid rgba(0,212,170,0.2);">
+                <div style="font-size: 2rem; font-family: var(--font-display); font-weight: 800; color: #00d4aa;">80%</div>
+                <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Корисний, освітній, розважальний контент. Не реклама!</div>
+              </div>
+              <div style="flex: 1; background: rgba(255,107,107,0.1); border-radius: 8px; padding: 14px; border: 1px solid rgba(255,107,107,0.2);">
+                <div style="font-size: 2rem; font-family: var(--font-display); font-weight: 800; color: #ff6b6b;">20%</div>
+                <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">Реклама і промо</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="schema-box" style="border-color: #00d4aa;">
+            <div class="schema-box-title" style="color: #00d4aa;">Термін життя контенту по платформах</div>
+            <div class="bar-chart">
+              <div class="bar-row"><div class="bar-label">Twitter/X</div><div class="bar-track"><div class="bar-fill" style="width:5%; background:#ff6b6b;"></div></div><div class="bar-value">18 хвилин</div></div>
+              <div class="bar-row"><div class="bar-label">Facebook</div><div class="bar-track"><div class="bar-fill" style="width:15%; background:#ffd166;"></div></div><div class="bar-value">5 годин</div></div>
+              <div class="bar-row"><div class="bar-label">Instagram</div><div class="bar-track"><div class="bar-fill" style="width:25%; background:#7c6bff;"></div></div><div class="bar-value">21 година</div></div>
+              <div class="bar-row"><div class="bar-label">LinkedIn</div><div class="bar-track"><div class="bar-fill" style="width:30%; background:#06b6d4;"></div></div><div class="bar-value">24 години</div></div>
+              <div class="bar-row"><div class="bar-label">Pinterest ✓</div><div class="bar-track"><div class="bar-fill" style="width:100%; background:#00d4aa;"></div></div><div class="bar-value">3–4 місяці</div></div>
+            </div>
+          </div>
+
+          <div class="schema-box" style="border-color: #00d4aa;">
+            <div class="schema-box-title" style="color: #00d4aa;">Хештеги — для чого?</div>
+            <div class="mini-grid">
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">Пошук</div><div class="mini-card-desc">Допомагають знаходити контент за темою</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">Відстеження</div><div class="mini-card-desc">Моніторинг ефективності кампанії</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">UGC</div><div class="mini-card-desc">Заохочують створювати контент</div></div>
+            </div>
+            <p style="font-size: 12px; color: var(--accent3); margin-top: 8px;">❌ Hijacking хештегів (використання нерелевантних) = СПАМ!</p>
+          </div>
+
+          <div class="schema-box" style="border-color: #00d4aa;">
+            <div class="schema-box-title" style="color: #00d4aa;">UGC — переваги для маркетологів</div>
+            <div class="mini-grid">
+              <div class="mini-card"><div class="mini-card-title">Соціальний доказ</div><div class="mini-card-desc">Реальні відгуки підвищують довіру</div></div>
+              <div class="mini-card"><div class="mini-card-title">SEO</div><div class="mini-card-desc">Свіжий контент покращує рейтинг</div></div>
+              <div class="mini-card"><div class="mini-card-title">Бюджет</div><div class="mini-card-desc">Безкоштовний контент від юзерів</div></div>
+              <div class="mini-card"><div class="mini-card-title">Ad blockers</div><div class="mini-card-desc">UGC не виглядає як реклама</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3 -->
+    <div class="module" id="m3">
+      <div class="module-dot" style="border-color: #ffd166; box-shadow: 0 0 12px rgba(255,209,102,0.4);"></div>
+      <div class="module-card">
+        <div class="module-header" onclick="toggleModule(this)">
+          <div class="module-num">03</div>
+          <div class="module-info">
+            <div class="module-title" style="color: #ffd166;">Аналітика та ROI</div>
+            <div class="module-sub">KPI · UTM · Формула ROI · Vanity metrics · Engagement</div>
+          </div>
+          <div class="module-weeks">Тижні 5–6</div>
+          <div class="module-chevron">▼</div>
+        </div>
+        <div class="module-body">
+          <div class="topics">
+            <span class="topic-pill">Типи метрик</span>
+            <span class="topic-pill">KPI для керівництва</span>
+            <span class="topic-pill">UTM-параметри</span>
+            <span class="topic-pill">Формула ROI</span>
+            <span class="topic-pill">Vanity metrics</span>
+            <span class="topic-pill">Engagement KPI</span>
+          </div>
+
+          <div class="schema-box" style="border-color: #ffd166;">
+            <div class="schema-box-title" style="color: #ffd166;">Ключові формули</div>
+            <div class="formula-block">
+              <div class="formula">Reach = кількість унікальних людей що ПОБАЧИЛИ пост</div>
+              <div class="formula">Engagement = лайки + коменти + репости + кліки</div>
+              <div class="formula">ER% = Engagement ÷ Reach × 100</div>
+              <div class="formula" style="color: #ffd166;">ROI = (Дохід − Витрати) ÷ Витрати × 100</div>
+            </div>
+          </div>
+
+          <div class="schema-box" style="border-color: #ffd166;">
+            <div class="schema-box-title" style="color: #ffd166;">Що цікавить топ-менеджерів?</div>
+            <div class="mini-grid">
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">✓ Sentiment</div><div class="mini-card-desc">Як аудиторія ставиться до бренду</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">✓ Competitive advantage</div><div class="mini-card-desc">Перевага над конкурентами</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">✓ Customer satisfaction</div><div class="mini-card-desc">Задоволеність клієнтів</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #ff6b6b;">✗ Click-through rates</div><div class="mini-card-desc">Операційна метрика, не для CEO</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #ff6b6b;">✗ Followers count</div><div class="mini-card-desc">Vanity metric — не реальний бізнес</div></div>
+            </div>
+          </div>
+
+          <div class="schema-box" style="border-color: #ffd166;">
+            <div class="schema-box-title" style="color: #ffd166;">UTM-параметри</div>
+            <div class="formula-block">
+              <div class="formula">utm_source = звідки прийшов (instagram, facebook)</div>
+              <div class="formula">utm_medium = тип каналу (social, email, cpc)</div>
+              <div class="formula">utm_campaign = назва кампанії (spring_sale)</div>
+            </div>
+            <p style="font-size: 12px; color: var(--muted); margin-top: 10px;">Мета: відстежувати ЗВІДКИ приходить трафік із соцмереж.</p>
+          </div>
+
+          <div class="schema-box" style="border-color: #ffd166;">
+            <div class="schema-box-title" style="color: #ffd166;">Всі витрати для підрахунку ROI</div>
+            <div class="tip-list">
+              <div class="tip-item"><div class="tip-icon">⏰</div><div class="tip-text">Робочі години команди</div></div>
+              <div class="tip-item"><div class="tip-icon">🏢</div><div class="tip-text">Агентство або фрілансери</div></div>
+              <div class="tip-item"><div class="tip-icon">💻</div><div class="tip-text">Програмне забезпечення (Hootsuite, Canva тощо)</div></div>
+              <div class="tip-item"><div class="tip-icon">🎨</div><div class="tip-text">Розробка контенту (фото, відео, дизайн)</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4 -->
+    <div class="module" id="m4">
+      <div class="module-dot" style="border-color: #ff6b6b; box-shadow: 0 0 12px rgba(255,107,107,0.4);"></div>
+      <div class="module-card">
+        <div class="module-header" onclick="toggleModule(this)">
+          <div class="module-num">04</div>
+          <div class="module-info">
+            <div class="module-title" style="color: #ff6b6b;">Соціальне прослуховування</div>
+            <div class="module-sub">Listening vs Monitoring · Ліди · Customer advocacy</div>
+          </div>
+          <div class="module-weeks">Тиждень 7</div>
+          <div class="module-chevron">▼</div>
+        </div>
+        <div class="module-body">
+          <div class="topics">
+            <span class="topic-pill">Listening vs Monitoring</span>
+            <span class="topic-pill">Пошук лідів</span>
+            <span class="topic-pill">Customer advocacy</span>
+            <span class="topic-pill">Sales + Product insights</span>
+          </div>
+
+          <div class="schema-box" style="border-color: #ff6b6b;">
+            <div class="schema-box-title" style="color: #ff6b6b;">Listening vs Monitoring — ключова різниця</div>
+            <div class="compare-grid">
+              <div class="compare-card">
+                <div class="compare-title" style="color: #7c6bff;">Monitoring (Тактика)</div>
+                <div class="compare-items">
+                  <div class="compare-item">Реагування на конкретні пости</div>
+                  <div class="compare-item">Відповіді на коментарі</div>
+                  <div class="compare-item">Централізація розмов</div>
+                  <div class="compare-item">Приєднання до діалогу</div>
+                </div>
+              </div>
+              <div class="compare-card">
+                <div class="compare-title" style="color: #ff6b6b;">Listening (Стратегія)</div>
+                <div class="compare-items">
+                  <div class="compare-item">Аналіз репутації бренду</div>
+                  <div class="compare-item">Тренди ніші та галузі</div>
+                  <div class="compare-item">Висновки для стратегії</div>
+                  <div class="compare-item">Вищий рівень погляду</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="schema-box" style="border-color: #ff6b6b;">
+            <div class="schema-box-title" style="color: #ff6b6b;">Як знайти ліди через Listening</div>
+            <div class="tip-list">
+              <div class="tip-item"><div class="tip-icon">🔍</div><div class="tip-text">Відстежуй людей що скаржаться на конкурентів → пропонуй своє рішення</div></div>
+              <div class="tip-item"><div class="tip-icon">💬</div><div class="tip-text">Знаходь питання у своїй ніші → вступай у діалог з корисною відповіддю</div></div>
+              <div class="tip-item"><div class="tip-icon">🎯</div><div class="tip-text">Моніторинг хештегів та ключових слів → виявлення зацікавлених юзерів</div></div>
+            </div>
+          </div>
+
+          <div class="schema-box" style="border-color: #ff6b6b;">
+            <div class="schema-box-title" style="color: #ff6b6b;">Як збільшити customer advocacy?</div>
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 10px;">Відповідати на <strong style="color: var(--text);">ВСІ</strong> пости — і позитивні, і негативні. Це показує що ти слухаєш і клієнти відчувають себе почутими.</p>
+            <div class="mini-grid">
+              <div class="mini-card"><div class="mini-card-title" style="color: #ff6b6b;">✗ Лише позитивні</div><div class="mini-card-desc">Ігнорування негативу шкодить</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #ff6b6b;">✗ Лише негативні</div><div class="mini-card-desc">Ігнорування позитиву — теж помилка</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">✓ Всі пости</div><div class="mini-card-desc">Клієнти стають адвокатами бренду</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5 -->
+    <div class="module" id="m5">
+      <div class="module-dot" style="border-color: #06b6d4; box-shadow: 0 0 12px rgba(6,182,212,0.4);"></div>
+      <div class="module-card">
+        <div class="module-header" onclick="toggleModule(this)">
+          <div class="module-num">05</div>
+          <div class="module-info">
+            <div class="module-title" style="color: #06b6d4;">Інфлюенсери та соціальні продажі</div>
+            <div class="module-sub">3R · Типи · Simon Sinek · Mirroring · Social selling</div>
+          </div>
+          <div class="module-weeks">Тижні 8–9</div>
+          <div class="module-chevron">▼</div>
+        </div>
+        <div class="module-body">
+          <div class="topics">
+            <span class="topic-pill">Типи інфлюенсерів</span>
+            <span class="topic-pill">3R фреймворк</span>
+            <span class="topic-pill">Творча свобода</span>
+            <span class="topic-pill">Win-win партнерство</span>
+            <span class="topic-pill">Social selling</span>
+            <span class="topic-pill">Simon Sinek</span>
+            <span class="topic-pill">Mirroring</span>
+            <span class="topic-pill">Коли робити pitch?</span>
+          </div>
+
+          <div class="schema-box" style="border-color: #06b6d4;">
+            <div class="schema-box-title" style="color: #06b6d4;">3R інфлюенсера — фактори впливу на поведінку</div>
+            <div class="mini-grid">
+              <div class="mini-card"><div class="mini-card-title" style="color: #06b6d4;">Reach</div><div class="mini-card-desc">Скільки людей бачать контент</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #06b6d4;">Relevance</div><div class="mini-card-desc">Наскільки відповідає ніші</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #06b6d4;">Resonance</div><div class="mini-card-desc">Сила реакції аудиторії</div></div>
+            </div>
+            <p style="font-size: 12px; color: var(--accent3); margin-top: 8px;">❌ "Recognition" — НЕ входить до трьох факторів! Це пастка на тесті.</p>
+          </div>
+
+          <div class="schema-box" style="border-color: #06b6d4;">
+            <div class="schema-box-title" style="color: #06b6d4;">Типи інфлюенсерів</div>
+            <div class="mini-grid">
+              <div class="mini-card"><div class="mini-card-title">Industry</div><div class="mini-card-desc">Галузеві експерти</div></div>
+              <div class="mini-card"><div class="mini-card-title">Content creator</div><div class="mini-card-desc">Творці контенту</div></div>
+              <div class="mini-card"><div class="mini-card-title">Local</div><div class="mini-card-desc">Місцеві лідери</div></div>
+              <div class="mini-card"><div class="mini-card-title">Celebrity</div><div class="mini-card-desc">Знаменитості</div></div>
+            </div>
+            <p style="font-size: 12px; color: var(--accent3); margin-top: 8px;">❌ "Attorney" (юрист) — НЕ є типом інфлюенсера. Це професія!</p>
+          </div>
+
+          <div class="schema-box" style="border-color: #06b6d4;">
+            <div class="schema-box-title" style="color: #06b6d4;">Simon Sinek — Golden Circle</div>
+            <div style="text-align: center; padding: 10px 0;">
+              <div style="display: inline-block; text-align: center;">
+                <div style="background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.3); border-radius: 50%; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; position: relative; margin: 0 auto;">
+                  <div style="background: rgba(6,182,212,0.2); border: 1px solid rgba(6,182,212,0.4); border-radius: 50%; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; position: absolute;">
+                    <div style="background: rgba(6,182,212,0.35); border: 1px solid rgba(6,182,212,0.5); border-radius: 50%; width: 65px; height: 65px; display: flex; align-items: center; justify-content: center; position: absolute;">
+                      <div style="text-align: center;"><div style="font-size: 12px; font-weight: 700; color: #06b6d4;">WHY</div></div>
+                    </div>
+                    <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--muted); white-space: nowrap;">HOW</div>
+                  </div>
+                  <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--muted); white-space: nowrap;">WHAT</div>
+                </div>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--muted); text-align: center; margin-top: 10px;">"People don't buy WHAT you do — they buy <strong style="color: #06b6d4;">WHY</strong> you do it."</p>
+          </div>
+
+          <div class="schema-box" style="border-color: #06b6d4;">
+            <div class="schema-box-title" style="color: #06b6d4;">Social selling — інбаунд підхід</div>
+            <div class="compare-grid">
+              <div class="compare-card">
+                <div class="compare-title" style="color: #ff6b6b;">✗ Outbound (погано)</div>
+                <div class="compare-items">
+                  <div class="compare-item">Холодні DM з пропозицією</div>
+                  <div class="compare-item">Шаблонні повідомлення</div>
+                  <div class="compare-item">Теги в рекламних постах</div>
+                </div>
+              </div>
+              <div class="compare-card">
+                <div class="compare-title" style="color: #00d4aa;">✓ Inbound (правильно)</div>
+                <div class="compare-items">
+                  <div class="compare-item">Надання корисного контенту</div>
+                  <div class="compare-item">Відповіді на питання</div>
+                  <div class="compare-item">Pitch після rapport</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6 -->
+    <div class="module" id="m6">
+      <div class="module-dot" style="border-color: #f97316; box-shadow: 0 0 12px rgba(249,115,22,0.4);"></div>
+      <div class="module-card">
+        <div class="module-header" onclick="toggleModule(this)">
+          <div class="module-num">06</div>
+          <div class="module-info">
+            <div class="module-title" style="color: #f97316;">Кризовий менеджмент</div>
+            <div class="module-sub">4 етапи · Message maps · Що робити і НЕ робити</div>
+          </div>
+          <div class="module-weeks">Тиждень 10</div>
+          <div class="module-chevron">▼</div>
+        </div>
+        <div class="module-body">
+          <div class="topics">
+            <span class="topic-pill">4 етапи кризи</span>
+            <span class="topic-pill">Message maps</span>
+            <span class="topic-pill">Що уникати в кризу</span>
+            <span class="topic-pill">Оцінка команди</span>
+            <span class="topic-pill">Конкурент в кризі</span>
+          </div>
+
+          <div class="schema-box" style="border-color: #f97316;">
+            <div class="schema-box-title" style="color: #f97316;">4 етапи кризового менеджменту</div>
+            <div class="stages">
+              <div class="stage-card" style="border-color: rgba(124,107,255,0.3);">
+                <div class="stage-name" style="color: #7c6bff;">Preparation</div>
+                <div class="stage-items">Message maps<br>Listening протоколи<br>Кризовий план</div>
+              </div>
+              <div class="stage-card" style="border-color: rgba(255,107,107,0.3);">
+                <div class="stage-name" style="color: #ff6b6b;">Crisis</div>
+                <div class="stage-items">Виявлення кризи<br>Оцінка ситуації</div>
+              </div>
+              <div class="stage-card" style="border-color: rgba(249,115,22,0.3);">
+                <div class="stage-name" style="color: #f97316;">Response</div>
+                <div class="stage-items">Активна комунікація<br>Вирішення</div>
+              </div>
+              <div class="stage-card" style="border-color: rgba(0,212,170,0.3);">
+                <div class="stage-name" style="color: #00d4aa;">Recovery</div>
+                <div class="stage-items">Аналіз KPI<br>Оцінка команди<br>Висновки</div>
+              </div>
+            </div>
+            <p style="font-size: 12px; color: var(--accent3);">⚡ Оцінка команди та аналіз KPI — це RECOVERY, не Response!</p>
+            <p style="font-size: 12px; color: var(--accent3);">⚡ Message maps та listening протоколи — це PREPARATION!</p>
+          </div>
+
+          <div class="schema-box" style="border-color: #f97316;">
+            <div class="schema-box-title" style="color: #f97316;">Що робити під час кризи?</div>
+            <div class="tip-list">
+              <div class="tip-item"><div class="tip-icon" style="color: #00d4aa;">✓</div><div class="tip-text">Призупини маркетингові розсилки та заплановані пости</div></div>
+              <div class="tip-item"><div class="tip-icon" style="color: #00d4aa;">✓</div><div class="tip-text">Оціни запланований контент на відповідність ситуації</div></div>
+              <div class="tip-item"><div class="tip-icon" style="color: #00d4aa;">✓</div><div class="tip-text">Зберігай корисний підхід та виявляй емпатію</div></div>
+              <div class="tip-item"><div class="tip-icon" style="color: #ff6b6b;">✗</div><div class="tip-text">НЕ надсилай рекламні пости під час кризи — виглядає безтактно</div></div>
+              <div class="tip-item"><div class="tip-icon" style="color: #ff6b6b;">✗</div><div class="tip-text">НЕ атакуй конкурентів публічно — завжди шкодить твоїй репутації</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 7 -->
+    <div class="module" id="m7">
+      <div class="module-dot" style="border-color: #a3e635; box-shadow: 0 0 12px rgba(163,230,53,0.4);"></div>
+      <div class="module-card">
+        <div class="module-header" onclick="toggleModule(this)">
+          <div class="module-num">07</div>
+          <div class="module-info">
+            <div class="module-title" style="color: #a3e635;">Бренд, тон та реклама</div>
+            <div class="module-sub">Voice vs Tone · CTA · Ad Fatigue · Earned/Paid/Owned media</div>
+          </div>
+          <div class="module-weeks">Тижні 11–12</div>
+          <div class="module-chevron">▼</div>
+        </div>
+        <div class="module-body">
+          <div class="topics">
+            <span class="topic-pill">Voice vs Tone</span>
+            <span class="topic-pill">Humanizing brand</span>
+            <span class="topic-pill">CTA мова</span>
+            <span class="topic-pill">Ad Fatigue</span>
+            <span class="topic-pill">Earned vs Paid media</span>
+            <span class="topic-pill">Facebook vs Google Ads</span>
+          </div>
+
+          <div class="schema-box" style="border-color: #a3e635;">
+            <div class="schema-box-title" style="color: #a3e635;">Voice vs Tone — ключова різниця</div>
+            <div class="compare-grid">
+              <div class="compare-card">
+                <div class="compare-title" style="color: #a3e635;">Voice (Голос)</div>
+                <div style="font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px;">Виразна та <strong style="color: var(--text);">стабільна</strong> особистість бренду. Не змінюється. Хто ви є.</div>
+              </div>
+              <div class="compare-card">
+                <div class="compare-title" style="color: #ffd166;">Tone (Тон)</div>
+                <div style="font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px;">Настрої конкретного контенту. <strong style="color: var(--text);">Змінюється</strong> залежно від ситуації та каналу.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="schema-box" style="border-color: #a3e635;">
+            <div class="schema-box-title" style="color: #a3e635;">3 типи медіа</div>
+            <div class="media-grid">
+              <div class="media-card" style="border-color: rgba(255,107,107,0.3);">
+                <div class="media-title" style="color: #ff6b6b;">PAID</div>
+                <div class="media-desc">Реклама, промоції, спонсорство. Платиш за охоплення.</div>
+              </div>
+              <div class="media-card" style="border-color: rgba(124,107,255,0.3);">
+                <div class="media-title" style="color: #7c6bff;">OWNED</div>
+                <div class="media-desc">Сайт, блог, соцмережі бренду. Ти контролюєш.</div>
+              </div>
+              <div class="media-card" style="border-color: rgba(163,230,53,0.3);">
+                <div class="media-title" style="color: #a3e635;">EARNED</div>
+                <div class="media-desc">Відгуки, репости, PR. Заробляєш органічно.</div>
+              </div>
+            </div>
+            <p style="font-size: 12px; color: var(--accent3); margin-top: 10px;">❌ Earned media — це НЕ те, за що платиш. Earned = зароблено органічно!</p>
+          </div>
+
+          <div class="schema-box" style="border-color: #a3e635;">
+            <div class="schema-box-title" style="color: #a3e635;">Facebook Ads vs Google Ads</div>
+            <div class="compare-grid">
+              <div class="compare-card">
+                <div class="compare-title" style="color: #06b6d4;">Facebook Ads</div>
+                <div style="font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px;">Таргетинг на основі <strong style="color: var(--text);">інтересів та демографії</strong>. Знає ХТО ти є.</div>
+              </div>
+              <div class="compare-card">
+                <div class="compare-title" style="color: #ff6b6b;">Google Ads</div>
+                <div style="font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px;">Таргетинг на основі <strong style="color: var(--text);">пошукових намірів</strong>. Знає ЩО ти шукаєш.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="schema-box" style="border-color: #a3e635;">
+            <div class="schema-box-title" style="color: #a3e635;">CTA — активна мова</div>
+            <div class="mini-grid">
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">✓ Subscribe</div><div class="mini-card-desc">Активне дієслово</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">✓ Watch</div><div class="mini-card-desc">Активне дієслово</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #00d4aa;">✓ Donate</div><div class="mini-card-desc">Активне дієслово</div></div>
+              <div class="mini-card"><div class="mini-card-title" style="color: #ff6b6b;">✗ "More here"</div><div class="mini-card-desc">НЕ активне дієслово!</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /roadmap -->
+
+  <!-- METHODS SECTION -->
+  <section class="methods" id="methods">
+    <div class="section-label">Як вчитися ефективно</div>
+    <h2 class="section-title">4 робочих методи<br>для засвоєння</h2>
+    <div class="methods-grid">
+      <div class="method-card">
+        <span class="method-icon" style="color: #7c6bff;">01</span>
+        <div class="method-title">True/False тест</div>
+        <div class="method-desc">Після кожного модуля склади 5 своїх True/False питань та дай відповіді. Це найкраще виявляє прогалини.</div>
+      </div>
+      <div class="method-card">
+        <span class="method-icon" style="color: #00d4aa;">02</span>
+        <div class="method-title">Реальний бренд</div>
+        <div class="method-desc">Бери будь-який бренд (Nike, Apple, улюблений ресторан) і аналізуй через кожну тему. Теорія стає практикою.</div>
+      </div>
+      <div class="method-card">
+        <span class="method-icon" style="color: #ffd166;">03</span>
+        <div class="method-title">Навчи іншого</div>
+        <div class="method-desc">Поясни тему вголос уявному другу. Якщо застряг — значить ще не зрозумів. Найкращий індикатор знань.</div>
+      </div>
+      <div class="method-card">
+        <span class="method-icon" style="color: #ff6b6b;">04</span>
+        <div class="method-title">Антиприклад</div>
+        <div class="method-desc">Для кожної теми знайди приклад того, як робити НЕПРАВИЛЬНО. Це кращий спосіб запам'ятати правило.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK REFERENCE -->
+  <section>
+    <div class="section-label">Швидка шпаргалка</div>
+    <h2 class="section-title">Ловушки на тесті<br>які треба знати</h2>
+    <div class="tip-list">
+      <div class="tip-item"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Twitter/X</strong> — публікувати найчастіше. <strong>Pinterest</strong> — найдовший термін життя контенту.</div></div>
+      <div class="tip-item"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Voice</strong> = стабільний (не змінюється). <strong>Tone</strong> = змінюється по ситуації.</div></div>
+      <div class="tip-item"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Earned media</strong> = органічне (безкоштовне). Реклама = <strong>Paid media</strong>.</div></div>
+      <div class="tip-item"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Message maps</strong> = Preparation stage. <strong>Оцінка команди</strong> = Recovery stage.</div></div>
+      <div class="tip-item"><div class="tip-icon">⚡</div><div class="tip-text"><strong>3R</strong> = Reach, Relevance, Resonance. "Recognition" — НЕ входить!</div></div>
+      <div class="tip-item"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Curated content</strong> = чужий контент З посиланням на джерело. Не плагіат!</div></div>
+      <div class="tip-item"><div class="tip-icon">⚡</div><div class="tip-text"><strong>ROI формула:</strong> (Дохід − Витрати) ÷ Витрати × 100. Враховуй ВСІ витрати.</div></div>
+      <div class="tip-item"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Social selling</strong> = надавай цінність і відповідай на питання. Pitch — лише після rapport.</div></div>
+    </div>
+  </section>
+
+</div><!-- /container -->
+
+<footer>
+  <p>Створено з ❤️ для підготовки до <span>SMM сертифікації</span></p>
+  <p style="margin-top: 6px; font-size: 11px; opacity: 0.5;">7 модулів · 12 тижнів · 70+ тем</p>
+</footer>
+
+<script>
+function toggleModule(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.module-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+// Animate modules on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.module').forEach(m => {
+  m.style.opacity = '0';
+  m.style.transform = 'translateY(20px)';
+  m.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(m);
+});
+</script>
+</body>
+</html>
