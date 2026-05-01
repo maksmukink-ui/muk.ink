@@ -15,6 +15,7 @@
   <a href="#tracks">Треки</a>
   <a href="#skills">Скіли</a>
   <a href="pages/smm-course.html">SMM курс</a>
+  <a href="#donate" style="color:var(--green)">☕ Підтримати</a>
   <a href="#quiz" class="nav-cta">Почати →</a>
 </nav>
 
@@ -183,6 +184,36 @@
       </div>
     </div>
 
+  </div>
+</div>
+</div>
+
+
+<!-- ДОНАТ БЛОК -->
+<div class="section-dark" id="donate">
+<div class="container">
+  <div class="donate-wrap">
+    <div class="donate-left">
+      <span class="label">Підтримати проект</span>
+      <h2 class="title" style="font-size:clamp(1.5rem,3vw,2.2rem)">Курс безкоштовний.<br>Назавжди.</h2>
+      <p class="desc" style="margin-bottom:0">KMY GROW розвивається силами одного автора. Жодної реклами, жодних платних модулів — весь контент відкритий. Якщо курс приносить тобі користь — підтримай розвиток нових матеріалів довільною сумою.</p>
+    </div>
+    <div class="donate-right">
+      <div class="donate-card">
+        <div class="donate-amounts">
+          <button class="donate-amt" onclick="setAmt(this,50)">₴50</button>
+          <button class="donate-amt active" onclick="setAmt(this,100)">₴100</button>
+          <button class="donate-amt" onclick="setAmt(this,250)">₴250</button>
+          <button class="donate-amt" onclick="setAmt(this,500)">₴500</button>
+        </div>
+        <div class="donate-custom">
+          <input class="donate-input" type="number" id="donateAmt" value="100" min="1" placeholder="Своя сума">
+          <span class="donate-currency">₴</span>
+        </div>
+        <button class="btn btn-green" style="width:100%;justify-content:center" onclick="handleDonate()">Підтримати проект →</button>
+        <div class="donate-note">💳 Monobank · PrivatBank — незабаром</div>
+      </div>
+    </div>
   </div>
 </div>
 </div>
