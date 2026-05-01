@@ -455,6 +455,7 @@ footer span { color: var(--accent1); }
   <a href="#m6">Кризи</a>
   <a href="#m7">Бренд</a>
   <a href="#methods">Методи</a>
+  <a href="#flashcards" style="color: #00d4aa; font-weight: 600;">🃏 Флеш-картки</a>
 </nav>
 
 <div class="container">
@@ -1057,5 +1058,122 @@ document.querySelectorAll('.module').forEach(m => {
   observer.observe(m);
 });
 </script>
+
+<!-- FLASHCARDS SECTION -->
+<div style="background: var(--surface); border-top: 1px solid var(--border); padding: 5rem 0;" id="flashcards">
+<div class="container">
+  <div class="section-label">Флеш-картки</div>
+  <h2 class="section-title">Перевір себе —<br>43 запитання та відповіді</h2>
+  <p style="color: var(--muted); margin-bottom: 2rem;">Натисни на картку щоб побачити відповідь. Фільтруй по модулях або перемішай.</p>
+  <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem;">
+    <button class="fc-tab active" onclick="filterCards('all', this)">Всі</button>
+    <button class="fc-tab" onclick="filterCards('1', this)">Модуль 1</button>
+    <button class="fc-tab" onclick="filterCards('2', this)">Модуль 2</button>
+    <button class="fc-tab" onclick="filterCards('3', this)">Модуль 3</button>
+    <button class="fc-tab" onclick="filterCards('4', this)">Модуль 4</button>
+    <button class="fc-tab" onclick="filterCards('5', this)">Модуль 5</button>
+    <button class="fc-tab" onclick="filterCards('6', this)">Модуль 6</button>
+    <button class="fc-tab" onclick="filterCards('7', this)">Модуль 7</button>
+  </div>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <span id="fc-count" style="font-size: 13px; color: var(--muted);">Показано: 43 картки</span>
+    <button onclick="shuffleCards()" style="font-size: 12px; padding: 6px 16px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); cursor: pointer; font-family: var(--font-body);">🔀 Перемішати</button>
+  </div>
+  <div id="fc-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;"></div>
+</div>
+</div>
+
+<style>
+.fc-tab { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
+.fc-tab:hover, .fc-tab.active { color: var(--text); border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); }
+.fc-card { perspective: 1000px; height: 170px; cursor: pointer; }
+.fc-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.45s ease; border-radius: 14px; }
+.fc-card.flipped .fc-inner { transform: rotateY(180deg); }
+.fc-front, .fc-back { position: absolute; inset: 0; border-radius: 14px; padding: 18px 20px; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--border); }
+.fc-front { background: var(--surface); }
+.fc-back { background: var(--surface2); transform: rotateY(180deg); }
+.fc-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.fc-q, .fc-a { font-size: 13px; line-height: 1.55; color: var(--text); flex: 1; }
+.fc-hint { font-size: 10px; color: var(--muted); }
+.fc-correct { font-size: 10px; font-weight: 600; color: #00d4aa; }
+</style>
+
+<script>
+const flashcards = [
+  {m:"1",c:"#7c6bff",q:"Що таке S.M.A.R.T. ціль?",a:"Specific, Measurable, Attainable, Relevant, Timely — конкретна, вимірювана, досяжна, релевантна, часова."},
+  {m:"1",c:"#7c6bff",q:"Як часто треба проводити соціальний аудит?",a:"Щоквартально або раз на рік. Раз на 2-3 роки — занадто рідко!"},
+  {m:"1",c:"#7c6bff",q:"Скільки організаційних моделей SMM існує?",a:"П'ять: Centralized, Distributed, Dandelion, Hub & Spoke. Holistic — НЕ є стандартним типом!"},
+  {m:"1",c:"#7c6bff",q:"На яких етапах Inbound використовується соціальний контент?",a:"На ВСІХ трьох: Attract, Engage, Delight — а не лише на двох!"},
+  {m:"1",c:"#7c6bff",q:"Яка перевага стратегії в соцмережах є хибною?",a:"Надсилати кращі email — соцмережі ніяк не впливають на якість email-розсилок."},
+  {m:"1",c:"#7c6bff",q:"Як часто треба переглядати KPI?",a:"Щоквартально або раз на рік. НЕ раз на 18 місяців — соцмережі змінюються надто швидко!"},
+  {m:"2",c:"#00d4aa",q:"Що означає правило 80/20 в контенті?",a:"80% — корисний/розважальний контент. 20% — рекламний. Аудиторія не приходить за рекламою!"},
+  {m:"2",c:"#00d4aa",q:"Яка платформа має найдовший термін життя контенту?",a:"Pinterest — 3-4 місяці, бо працює як пошукова система."},
+  {m:"2",c:"#00d4aa",q:"На якій платформі треба публікувати найчастіше?",a:"Twitter/X — контент живе лише 18 хвилин через швидкий потік стрічки."},
+  {m:"2",c:"#00d4aa",q:"Що таке ephemeral stories?",a:"Фото/відео контент з фільтрами та стікерами, що зникає через 24 години. Instagram, Snapchat."},
+  {m:"2",c:"#00d4aa",q:"Що таке Real-time marketing?",a:"Контент на ходу для подій — онлайн АБО офлайн. Не тільки онлайн!"},
+  {m:"2",c:"#00d4aa",q:"Що таке curated content?",a:"Підбір ЧУЖОГО контенту з посиланням на джерело. НЕ плагіат — показує цінність аудиторії."},
+  {m:"2",c:"#00d4aa",q:"Для чого корисні хештеги? (3 причини)",a:"Пошук, відстеження кампаній, стимулювання UGC. Hijacking нерелевантних хештегів = СПАМ!"},
+  {m:"2",c:"#00d4aa",q:"Instagram Stories — для чого найкраще?",a:"Drive traffic and engagement — збільшення трафіку та залученості."},
+  {m:"3",c:"#ffd166",q:"Формула ROI в соцмережах?",a:"(Чистий дохід − Витрати) ÷ Витрати × 100. Враховуй ВСІ витрати!"},
+  {m:"3",c:"#ffd166",q:"Що таке vanity metric? Приклад.",a:"Метрика що виглядає добре але не = бізнес-результат. Приклад: кількість підписників, лайки."},
+  {m:"3",c:"#ffd166",q:"Що цікавить топ-менеджерів у SMM?",a:"Sentiment, Competitive advantage, Customer satisfaction. НЕ CTR, НЕ кількість підписників."},
+  {m:"3",c:"#ffd166",q:"Для чого UTM-параметри?",a:"Відстеження ЗВІДКИ приходить трафік із соцмереж. source / medium / campaign."},
+  {m:"3",c:"#ffd166",q:"Які KPI демонструють engagement?",a:"Mentions, Sharing & Retweets, Likes/Favorites. НЕ прямий дохід, НЕ customer satisfaction."},
+  {m:"3",c:"#ffd166",q:"Різниця між Reach та Engagement?",a:"Reach = скільки ПОБАЧИЛИ. Engagement = скільки ВІДРЕАГУВАЛИ (лайки, коменти, репости)."},
+  {m:"3",c:"#ffd166",q:"Навіщо вимірювати ROI? Що НЕ є причиною?",a:"Причини: довести цінність, вплив на відділи, репутація. НЕ причина: залучення інфлюенсерів."},
+  {m:"4",c:"#ff6b6b",q:"Різниця між Social Listening та Monitoring?",a:"Monitoring = тактика (реагуємо на пости). Listening = стратегія (аналіз репутації з вищого рівня)."},
+  {m:"4",c:"#ff6b6b",q:"Як Social Listening допомагає знаходити ліди?",a:"Моніторинг скарг на конкурентів та питань у ніші — знаходимо зацікавлених людей."},
+  {m:"4",c:"#ff6b6b",q:"Як збільшити customer advocacy?",a:"Відповідати на ВСІ пости — і позитивні, і негативні. Клієнти відчувають себе почутими."},
+  {m:"4",c:"#ff6b6b",q:"Чи варто надсилати шаблонні повідомлення для пошуку лідів?",a:"FALSE! Canned messages виглядають як спам і знижують довіру до бренду."},
+  {m:"5",c:"#06b6d4",q:"Три фактори впливу інфлюенсера (3R)?",a:"Reach (охоплення), Relevance (релевантність), Resonance (резонанс). Recognition — НЕ входить!"},
+  {m:"5",c:"#06b6d4",q:"Які типи інфлюенсерів існують?",a:"Industry, Content creator, Local, Celebrity. Attorney (юрист) — НЕ тип інфлюенсера!"},
+  {m:"5",c:"#06b6d4",q:"Чому треба давати інфлюенсеру творчу свободу?",a:"Він знає свою аудиторію краще. Жорсткі правила = неавтентичний контент = низька ефективність."},
+  {m:"5",c:"#06b6d4",q:"Що таке Social selling інбаунд-способом?",a:"Надавати цінність через корисний контент та відповіді на питання. НЕ холодні DM!"},
+  {m:"5",c:"#06b6d4",q:"Коли робити sales pitch у соцмережах?",a:"Після достатнього rapport І коли клієнт сам шукає рішення. Не після першого контакту!"},
+  {m:"5",c:"#06b6d4",q:"Що каже Simon Sinek про покупців?",a:"People don't buy WHAT you do — they buy WHY you do it. Переконання важливіші за продукт."},
+  {m:"5",c:"#06b6d4",q:"Що таке Mirroring у продажах?",a:"Копіювання манери мовлення клієнта для побудови rapport та відчуття близькості."},
+  {m:"6",c:"#f97316",q:"4 етапи кризового менеджменту в SMM?",a:"Preparation → Crisis → Response → Recovery. Кожен має свої конкретні дії!"},
+  {m:"6",c:"#f97316",q:"На якому етапі створюються Message maps?",a:"PREPARATION — заздалегідь до кризи. Разом із listening protocols."},
+  {m:"6",c:"#f97316",q:"На якому етапі оцінюється команда та KPI?",a:"RECOVERY — після кризи. НЕ під час Response!"},
+  {m:"6",c:"#f97316",q:"Що НЕ треба робити під час кризи?",a:"Надсилати рекламні пости та твіти. Виглядає безтактно і шкодить репутації бренду."},
+  {m:"6",c:"#f97316",q:"Що робити якщо конкурент допустив помилку?",a:"Виявляти емпатію та відповідати вдумливо. Ніколи не атакуй публічно!"},
+  {m:"7",c:"#a3e635",q:"Різниця між Voice та Tone бренду?",a:"Voice = стабільна особистість (не змінюється). Tone = змінюється залежно від ситуації та каналу."},
+  {m:"7",c:"#a3e635",q:"Що таке Earned media?",a:"Охоплення зароблене ОРГАНІЧНО: відгуки, репости, PR. НЕ те за що платиш (це Paid media!)."},
+  {m:"7",c:"#a3e635",q:"Facebook Ads vs Google Ads — різниця?",a:"Facebook = таргетинг за інтересами/демографією. Google = таргетинг за пошуковими намірами."},
+  {m:"7",c:"#a3e635",q:"Яка фраза НЕ є активним CTA?",a:"More here — не є дієсловом. Правильні CTA: Subscribe, Watch, Donate, Download."},
+  {m:"7",c:"#a3e635",q:"Що таке Ad Fatigue і що його спричиняє?",a:"Рекламна втома. Спричиняє: одна картинка більше місяця, одна платформа, один оффер більше 2 місяців."},
+  {m:"7",c:"#a3e635",q:"Чому олюднення бренду дає перевагу?",a:"Люди вкладають час і гроші в тих з ким себе ідентифікують. Humanizing = конкурентна перевага."},
+];
+
+let currentCards = [...flashcards];
+
+function renderCards(cards) {
+  const grid = document.getElementById("fc-grid");
+  grid.innerHTML = "";
+  document.getElementById("fc-count").textContent = "Показано: " + cards.length + " карток";
+  cards.forEach(card => {
+    const div = document.createElement("div");
+    div.className = "fc-card";
+    div.innerHTML = "<div class=\"fc-inner\"><div class=\"fc-front\"><div><div class=\"fc-tag\" style=\"color:" + card.c + "\">Модуль " + card.m + "</div><div class=\"fc-q\">" + card.q + "</div></div><div class=\"fc-hint\">👆 Натисни щоб побачити відповідь</div></div><div class=\"fc-back\"><div><div class=\"fc-tag\" style=\"color:" + card.c + "\">Відповідь</div><div class=\"fc-a\">" + card.a + "</div></div><div class=\"fc-correct\">✓ Перевір себе</div></div></div>";
+    div.addEventListener("click", () => div.classList.toggle("flipped"));
+    grid.appendChild(div);
+  });
+}
+
+function filterCards(mod, btn) {
+  document.querySelectorAll(".fc-tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  currentCards = mod === "all" ? [...flashcards] : flashcards.filter(c => c.m === mod);
+  renderCards(currentCards);
+}
+
+function shuffleCards() {
+  currentCards = [...currentCards].sort(() => Math.random() - 0.5);
+  renderCards(currentCards);
+}
+
+renderCards(currentCards);
+</script>
+
 </body>
 </html>
