@@ -116,3 +116,19 @@ function resetQuiz() {
   document.getElementById('quizResult').style.display = 'none';
   goToStep(1);
 }
+
+/* ================================================
+   ДОНАТ — ЛОГІКА
+   ================================================ */
+function setAmt(btn, amount) {
+  document.getElementById('donateAmt').value = amount;
+  document.querySelectorAll('.donate-amt').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function handleDonate() {
+  const amount = document.getElementById('donateAmt').value;
+  if (!amount || amount < 1) return;
+  // Тут буде підключення платіжної системи
+  alert(`Дякуємо за підтримку ${amount}₴! 💙\nСистема оплати — незабаром.`);
+}
