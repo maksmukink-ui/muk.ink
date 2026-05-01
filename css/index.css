@@ -180,3 +180,78 @@
 @media (max-width: 480px) {
   .how-grid { grid-template-columns: 1fr; }
 }
+
+/* --- ДОНАТ --- */
+.donate-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 1rem 0;
+}
+.donate-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 1.5rem;
+}
+.donate-amounts {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.donate-amt {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.donate-amt:hover,
+.donate-amt.active {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(0,212,170,0.08);
+}
+.donate-custom {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.donate-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 10px 40px 10px 16px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+.donate-input:focus { border-color: var(--green); }
+.donate-currency {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+}
+.donate-note {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* --- АДАПТИВНІСТЬ ДОНАТУ --- */
+@media (max-width: 768px) {
+  .donate-wrap { grid-template-columns: 1fr; gap: 1.5rem; }
+}
