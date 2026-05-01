@@ -82,3 +82,60 @@
 @media (max-width: 480px) {
   .outcomes-grid { grid-template-columns: 1fr; }
 }
+
+/* --- ТЕРМІНИ --- */
+.term-grid { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.term-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+}
+.term-name { font-size: 12px; font-weight: 700; color: var(--text); }
+.term-def  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* --- КАНАЛИ --- */
+.channel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.channel-card {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+}
+.channel-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.channel-desc { font-size: 11px; color: var(--muted); line-height: 1.55; }
+
+/* --- КЕЙС-БОКСІ --- */
+.example-box {
+  background: rgba(46,134,193,0.06);
+  border: 1px solid rgba(46,134,193,0.2);
+  border-left: 3px solid #2E86C1;
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  margin-top: 14px;
+}
+.example-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4A9FD4;
+  margin-bottom: 6px;
+}
+.example-text {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+@media (max-width: 600px) {
+  .term-row { grid-template-columns: 1fr; gap: 4px; }
+  .channel-grid { grid-template-columns: 1fr; }
+}
