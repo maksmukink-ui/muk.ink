@@ -1,0 +1,145 @@
+/* ================================================
+   SMM-COURSE.CSS — Стилі сторінки SMM курсу
+   ================================================ */
+
+/* --- PAGE HERO --- */
+.page-hero {
+  padding: 5rem 0 3rem;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(0,212,170,0.3);
+  color: var(--green);
+  display: inline-block;
+  margin-bottom: 1.2rem;
+}
+.page-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.page-hero h1 em { font-style: normal; color: var(--green); }
+.page-hero-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+.meta-item { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.meta-item strong { color: var(--text); }
+
+/* --- МОДУЛІ ROADMAP --- */
+.module-item { margin-bottom: 1.2rem; }
+
+.module-num-badge {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  min-width: 28px;
+}
+.module-title-text {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+}
+.module-subtitle { font-size: 12px; color: var(--muted); }
+.module-weeks    { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+.module-body-inner { padding-top: 14px; }
+.module-body-inner p { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 14px; }
+
+/* Пілюлі тем */
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+/* Порівняльна таблиця */
+.compare-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.compare-block {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+}
+.compare-block-title { font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+.compare-block ul    { padding-left: 0; list-style: none; }
+.compare-block li    { font-size: 11px; color: var(--muted); line-height: 1.7; }
+.compare-block li::before { content: '→ '; color: var(--accent); }
+
+/* Бар-чарт */
+.bar-chart { display: flex; flex-direction: column; gap: 8px; }
+.bar-row   { display: flex; align-items: center; gap: 10px; }
+.bar-label { font-size: 12px; color: var(--muted); min-width: 90px; text-align: right; }
+.bar-track { flex: 1; height: 7px; background: rgba(255,255,255,0.05); border-radius: 4px; }
+.bar-fill  { height: 100%; border-radius: 4px; }
+.bar-value { font-size: 11px; color: var(--muted); min-width: 80px; }
+
+/* Етапи кризи */
+.crisis-stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.crisis-stage {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px;
+  text-align: center;
+}
+.crisis-stage-name  { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.crisis-stage-items { font-size: 10px; color: var(--muted); line-height: 1.7; }
+
+/* --- ФЛЕШ-КАРТКИ --- */
+.fc-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.fc-tabs { display: flex; flex-wrap: wrap; gap: 7px; }
+.fc-count { font-size: 13px; color: var(--muted); }
+
+.fc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+/* --- СЛОВНИК --- */
+.glossary-list { display: flex; flex-direction: column; gap: 10px; }
+
+/* --- АДАПТИВНІСТЬ --- */
+@media (max-width: 768px) {
+  .compare-row   { grid-template-columns: 1fr; }
+  .crisis-stages { grid-template-columns: 1fr 1fr; }
+  .page-hero h1  { font-size: 2rem; }
+}
+@media (max-width: 480px) {
+  .crisis-stages { grid-template-columns: 1fr; }
+}

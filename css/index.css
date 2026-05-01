@@ -1,0 +1,182 @@
+/* ================================================
+   INDEX.CSS — Стилі тільки для головної сторінки
+   ================================================ */
+
+/* --- HERO --- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green);
+  border: 1px solid rgba(0,212,170,0.3);
+  padding: 6px 18px;
+  border-radius: var(--r-pill);
+  margin-bottom: 2rem;
+  display: inline-block;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  display: block;
+  line-height: 1;
+}
+.stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; display: block; }
+
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--muted);
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: bounce 2s ease-in-out infinite;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--muted), transparent);
+}
+
+/* --- КВІЗ --- */
+.quiz-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 2rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.quiz-progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+.quiz-dot {
+  height: 3px;
+  flex: 1;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.quiz-dot.active { background: var(--accent); }
+
+.quiz-step { display: none; }
+.quiz-step.active { display: block; }
+
+.quiz-q {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+
+.quiz-opt {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text);
+}
+.quiz-opt span { font-size: 1.1rem; flex-shrink: 0; }
+.quiz-opt:hover { border-color: var(--accent); background: rgba(124,107,255,0.08); }
+.quiz-opt.selected { border-color: var(--accent); background: rgba(124,107,255,0.12); }
+
+/* --- РЕЗУЛЬТАТ КВІЗУ --- */
+.quiz-result { display: none; text-align: center; padding: 1rem 0; }
+.result-icon  { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.result-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+.result-desc  { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+.result-tracks { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.result-track {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid;
+}
+
+/* --- ЯК ПРАЦЮЄ --- */
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-top: 2rem;
+}
+.how-card { background: var(--surface); padding: 28px 22px; }
+.how-num {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--border);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.how-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.how-desc  { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* --- АДАПТИВНІСТЬ --- */
+@media (max-width: 768px) {
+  .how-grid { grid-template-columns: 1fr 1fr; }
+  .hero-stats { gap: 1.5rem; }
+}
+@media (max-width: 480px) {
+  .how-grid { grid-template-columns: 1fr; }
+}
