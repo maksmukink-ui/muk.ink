@@ -1,0 +1,681 @@
+/* ================================================
+   INDEX.CSS — Стилі головної сторінки
+   ================================================ */
+
+/* ── HERO ─────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green);
+  border: 1px solid rgba(0,212,170,0.3);
+  padding: 6px 18px;
+  border-radius: var(--r-pill);
+  margin-bottom: 2rem;
+  display: inline-block;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+
+.hero-desc  { max-width: 480px; margin-bottom: 2rem; }
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  display: block;
+  line-height: 1;
+}
+.stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; display: block; }
+
+.hero-btns  { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--muted);
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: bounce 2s ease-in-out infinite;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--muted), transparent);
+}
+
+/* ── NAV спецлінки ───────────────────────────── */
+.nav-link--donate { color: var(--green); }
+
+/* ── QUIZ ─────────────────────────────────────── */
+.quiz-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 2rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.quiz-progress  { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+.quiz-dot {
+  height: 3px;
+  flex: 1;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.quiz-dot--active { background: var(--accent); }
+
+.quiz-step          { display: none; }
+.quiz-step--active  { display: block; }
+
+.quiz-q {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+
+.quiz-opt {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--text);
+}
+.quiz-opt__icon     { font-size: 1.1rem; flex-shrink: 0; }
+.quiz-opt:hover     { border-color: var(--accent); background: rgba(124,107,255,0.08); }
+.quiz-opt--selected { border-color: var(--accent); background: rgba(124,107,255,0.12); }
+
+.quiz-nav { margin-top: 1rem; }
+
+/* ── QUIZ РЕЗУЛЬТАТ ──────────────────────────── */
+.quiz-result        { display: none; text-align: center; padding: 1rem 0; }
+.quiz-result--show  { display: block; }
+
+.result-icon  { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.result-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+.result-desc   { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+.result-tracks { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 1rem; }
+.result-track  {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid;
+  text-decoration: none;
+}
+
+.quiz-result__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+/* ── HOW ──────────────────────────────────────── */
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-top: 2rem;
+}
+.how-card  { background: var(--surface); padding: 28px 22px; }
+.how-num   {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--border);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.how-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.how-desc  { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* ── TRACKS ───────────────────────────────────── */
+.track-info       { flex: 1; }
+.track-title      { font-family: var(--font-display); font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.track-sub        { font-size: 12px; color: var(--muted); }
+.track-body-desc  { font-size: 13px; color: var(--muted); margin: 14px 0 12px; }
+
+/* Кольори крапок треків */
+.track--foundation { color: rgba(124,107,255,1); box-shadow: 0 0 12px rgba(124,107,255,0.4); }
+.track--digital    { color: rgba(0,212,170,1);   box-shadow: 0 0 12px rgba(0,212,170,0.4); }
+.track--trade      { color: rgba(255,209,102,1); box-shadow: 0 0 12px rgba(255,209,102,0.3); }
+.track--product    { color: rgba(249,115,22,1);  box-shadow: 0 0 12px rgba(249,115,22,0.3); }
+.track--brand      { color: rgba(255,107,107,1); box-shadow: 0 0 12px rgba(255,107,107,0.3); }
+.track--smm        { color: rgba(60,52,137,1);   box-shadow: 0 0 12px rgba(60,52,137,0.4); }
+.track--growth     { color: rgba(8,80,65,1);     box-shadow: 0 0 12px rgba(8,80,65,0.4); }
+
+/* Кольори бейджів треків */
+.track-badge--foundation { background: rgba(124,107,255,0.15); color: rgba(124,107,255,1); }
+.track-badge--digital    { background: rgba(0,212,170,0.15);   color: rgba(0,212,170,1); }
+.track-badge--trade      { background: rgba(255,209,102,0.15); color: rgba(255,209,102,1); }
+.track-badge--product    { background: rgba(249,115,22,0.15);  color: rgba(249,115,22,1); }
+.track-badge--brand      { background: rgba(255,107,107,0.15); color: rgba(255,107,107,1); }
+.track-badge--smm        { background: rgba(60,52,137,0.15);   color: rgba(60,52,137,1); }
+.track-badge--growth     { background: rgba(8,80,65,0.15);     color: rgba(8,80,65,1); }
+
+/* Кольори заголовків треків */
+.track-title--foundation { color: rgba(124,107,255,1); }
+.track-title--digital    { color: rgba(0,212,170,1); }
+.track-title--trade      { color: rgba(255,209,102,1); }
+.track-title--product    { color: rgba(249,115,22,1); }
+.track-title--brand      { color: rgba(255,107,107,1); }
+.track-title--smm        { color: rgba(60,52,137,1); }
+.track-title--growth     { color: rgba(8,80,65,1); }
+
+
+/* ── SKILLS ───────────────────────────────────── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin-top: 2rem;
+}
+.skill-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  transition: all 0.2s;
+}
+.skill-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.15); }
+.skill-icon       { font-size: 1.5rem; margin-bottom: 10px; }
+.skill-title      { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.skill-desc       { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+.skill-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  margin-top: 10px;
+  display: inline-block;
+}
+/* Кольори тегів скілів */
+.skill-tag--green  { background: rgba(0,212,170,0.1);  color: var(--green); }
+.skill-tag--yellow { background: rgba(255,209,102,0.1); color: var(--yellow); }
+.skill-tag--accent { background: rgba(124,107,255,0.1); color: var(--accent); }
+.skill-tag--blue   { background: rgba(6,182,212,0.1);  color: var(--blue); }
+.skill-tag--orange { background: rgba(249,115,22,0.1); color: var(--orange); }
+.skill-tag--red    { background: rgba(255,107,107,0.1); color: var(--red); }
+
+/* ── DONATE ───────────────────────────────────── */
+.donate-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  padding: 1rem 0;
+}
+.donate-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+.donate-desc { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+.donate-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 1.5rem;
+}
+.donate-amounts { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+
+.donate-amt {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.donate-amt:hover,
+.donate-amt--active {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(0,212,170,0.08);
+}
+
+.donate-custom { position: relative; margin-bottom: 1rem; }
+
+.donate-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 10px 40px 10px 16px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.donate-input:focus { border-color: var(--green); }
+
+.donate-currency {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+.donate-note {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Утилітарний клас — кнопка на всю ширину */
+.btn--full { width: 100%; justify-content: center; }
+
+/* ── RESPONSIVE ───────────────────────────────── */
+@media (max-width: 768px) {
+  .how-grid    { grid-template-columns: 1fr 1fr; }
+  .donate-wrap { grid-template-columns: 1fr; gap: 1.5rem; }
+  .hero-stats  { gap: 1.5rem; }
+}
+@media (max-width: 480px) {
+  .how-grid { grid-template-columns: 1fr; }
+}
+
+
+
+
+
+
+
+/* ================================================
+   ROLES-POPUP.CSS — Стилі детальних попапів ролей
+   Розмісти вміст в index.css або main.css
+   ================================================ */
+
+/* ── ПОПАП ОБОЛОНКА ──────────────────────────────── */
+.popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+.popup--open { display: flex; }
+
+.popup__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  z-index: 0;
+}
+
+.popup__box {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  width: 100%;
+  max-width: 680px;
+  margin: auto;
+}
+
+/* ── ХЕДЕР ПОПАПУ ──────────────────────────────────── */
+.popup__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  z-index: 2;
+}
+
+.popup__category {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid;
+}
+.popup__category--growth {
+  background: rgba(39,80,10,0.3);
+  border-color: rgb(151,196,89);
+  color: rgb(192,221,151);
+}
+.popup__category--product {
+  background: rgba(113,43,19,0.3);
+  border-color: rgb(240,153,123);
+  color: rgb(245,196,179);
+}
+
+.popup__close {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  color: var(--muted);
+  font-size: 12px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: color 0.2s;
+}
+.popup__close:hover { color: var(--text); }
+
+/* ── КОНТЕНТ ПОПАПУ ──────────────────────────────────── */
+.popup__content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* KPI кнопки */
+.popup__ask-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+.popup__ask-btn:hover {
+  background: rgba(124,107,255,0.1);
+  color: var(--accent);
+  border-color: rgba(124,107,255,0.3);
+}
+.popup__ask-btn--full {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 13px;
+}
+
+/* ── КАРТКА РОЛІ ──────────────────────────────────── */
+.role-detail { padding: 1.25rem 0; }
+
+.role-detail__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Аватар */
+.role-detail__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.role-detail__avatar--growth  { background: rgba(192,221,151,0.15); color: rgb(192,221,151); }
+.role-detail__avatar--blue    { background: rgba(181,212,244,0.15); color: rgb(181,212,244); }
+.role-detail__avatar--purple  { background: rgba(206,203,246,0.15); color: rgb(206,203,246); }
+.role-detail__avatar--coral   { background: rgba(245,196,179,0.15); color: rgb(245,196,179); }
+.role-detail__avatar--amber   { background: rgba(250,199,117,0.15); color: rgb(250,199,117); }
+
+.role-detail__title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  letter-spacing: -0.01em;
+}
+.role-detail__sub { font-size: 12px; color: var(--muted); }
+
+/* Теги */
+.role-detail__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+
+.role-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+}
+.role-tag--growth  { background: rgba(192,221,151,0.12); color: rgb(192,221,151); }
+.role-tag--blue    { background: rgba(181,212,244,0.12); color: rgb(181,212,244); }
+.role-tag--purple  { background: rgba(206,203,246,0.12); color: rgb(206,203,246); }
+.role-tag--coral   { background: rgba(245,196,179,0.12); color: rgb(245,196,179); }
+.role-tag--amber   { background: rgba(250,199,117,0.12); color: rgb(250,199,117); }
+.role-tag--neutral { background: rgba(211,209,199,0.12); color: rgb(211,209,199); }
+
+/* Секція-лейбл */
+.role-detail__section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 14px 0 8px;
+}
+
+/* Вступний текст */
+.role-detail__intro { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* Обов'язки */
+.role-detail__duties { display: flex; flex-direction: column; }
+.duty-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text);
+}
+.duty-item:last-child { border-bottom: none; }
+.duty-num {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  min-width: 18px;
+  padding-top: 2px;
+}
+
+/* KPI список */
+.role-detail__kpis { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── ЗАРПЛАТНІ БАРИи ────────────────────────────────── */
+.salary-bars { display: flex; flex-direction: column; gap: 8px; }
+.salary-bar  { display: flex; align-items: center; gap: 10px; }
+.salary-bar__label { font-size: 12px; color: var(--muted); min-width: 72px; }
+.salary-bar__track { flex: 1; height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.salary-bar__fill  { height: 100%; border-radius: 3px; width: var(--w); }
+.salary-bar__value { font-size: 12px; font-weight: 500; color: var(--text); min-width: 110px; text-align: right; }
+
+/* Кольори барів */
+.salary-bar__fill--growth      { background: rgb(151,196,89); }
+.salary-bar__fill--growth-dark { background: rgb(39,80,10); }
+.salary-bar__fill--blue        { background: rgb(133,183,235); }
+.salary-bar__fill--blue-dark   { background: rgb(12,68,124); }
+.salary-bar__fill--purple      { background: rgb(175,169,236); }
+.salary-bar__fill--purple-dark { background: rgb(60,52,137); }
+.salary-bar__fill--coral       { background: rgb(240,153,123); }
+.salary-bar__fill--coral-dark  { background: rgb(113,43,19); }
+.salary-bar__fill--amber       { background: rgb(239,159,39); }
+.salary-bar__fill--amber-dark  { background: rgb(99,56,6); }
+
+/* ── КАР'ЄРНИЙ ШЛЯХ ────────────────────────────────── */
+.career-path {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 12px;
+}
+.career-path__node--prev    { color: var(--muted); }
+.career-path__node--current { color: var(--accent); font-weight: 600; }
+.career-path__node--next    { color: var(--muted); }
+.career-path__arrow         { color: var(--border); font-size: 11px; }
+
+/* ── GTM КРОКИ ──────────────────────────────────────── */
+.gtm-steps { display: flex; flex-direction: column; gap: 6px; }
+.gtm-step  {
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.gtm-step__num {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  min-width: 16px;
+  padding-top: 2px;
+}
+.gtm-step__content { flex: 1; }
+.gtm-step__title   { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.gtm-step__desc    { font-size: 12px; color: var(--muted); }
+
+.gtm-step__owner {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+.gtm-step__owner--pmm { background: rgba(245,196,179,0.15); color: rgb(245,196,179); }
+.gtm-step__owner--dg  { background: rgba(206,203,246,0.15); color: rgb(206,203,246); }
+.gtm-step__owner--gtm { background: rgba(192,221,151,0.15); color: rgb(192,221,151); }
+
+/* ── ПОРІВНЯЛЬНА ТАБЛИЦЯ ────────────────────────────── */
+.compare-table { margin-top: 8px; }
+.compare-table__title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.compare-table__grid {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.compare-table__grid--2 { grid-template-columns: 1fr 1fr; }
+.compare-table__grid--3 { grid-template-columns: repeat(3, 1fr); }
+
+.compare-col {
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  padding: 12px;
+}
+.compare-col__title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.compare-col__item {
+  font-size: 12px;
+  color: var(--text);
+  padding: 3px 0;
+  border-bottom: 1px solid var(--border);
+}
+.compare-col__item:last-child { border-bottom: none; }
+
+/* ── ДІЛЬНИК ────────────────────────────────────────── */
+.role-detail__divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width: 600px) {
+  .popup { padding: 0; align-items: flex-end; }
+  .popup__box { border-radius: var(--r-xl) var(--r-xl) 0 0; max-width: 100%; max-height: 90vh; overflow-y: auto; }
+  .compare-table__grid--2 { grid-template-columns: 1fr; }
+  .compare-table__grid--3 { grid-template-columns: 1fr; }
+}

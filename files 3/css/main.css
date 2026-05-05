@@ -1,0 +1,840 @@
+/* ================================================
+   KMY GROW — ГОЛОВНІ СТИЛІ
+   Використовуються на ВСІХ сторінках
+   ================================================ */
+
+/* ІМПОРТ ШРИФТІВ */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;600;700&display=swap');
+
+/* ================================================
+   CSS ЗМІННІ
+   ================================================ */
+:root {
+  /* Фони */
+  --bg:       #0a0a0f;
+  --surface:  #13131a;
+  --surface2: #1c1c26;
+  --border:   rgba(255,255,255,0.08);
+
+  /* Текст */
+  --text:     #f0eff8;
+  --muted:    #7a798f;
+
+  /* Акцентні кольори */
+  --accent:   #7c6bff;
+  --green:    #00d4aa;
+  --red:      #ff6b6b;
+  --yellow:   #ffd166;
+  --blue:     #06b6d4;
+  --orange:   #f97316;
+  --lime:     #a3e635;
+
+  /* Кольори треків */
+  --track-foundation: #7c6bff;
+  --track-digital:    #00d4aa;
+  --track-trade:      #ffd166;
+  --track-product:    #f97316;
+  --track-brand:      #ff6b6b;
+
+  /* Кольори модулів SMM */
+  --m1: #7c6bff;
+  --m2: #00d4aa;
+  --m3: #ffd166;
+  --m4: #ff6b6b;
+  --m5: #06b6d4;
+  --m6: #f97316;
+  --m7: #a3e635;
+
+  /* Шрифти */
+  --font-display: 'Unbounded', sans-serif;
+  --font-body:    'Manrope', sans-serif;
+
+  /* Радіуси */
+  --r-sm:   8px;
+  --r-md:   12px;
+  --r-lg:   16px;
+  --r-xl:   20px;
+  --r-pill: 100px;
+
+  /* Відступи */
+  --section-padding: 5rem 0;
+  --container-max:   960px;
+  --container-pad:   1.5rem;
+
+  /* Навігація */
+  --nav-height: 56px;
+}
+
+/* ================================================
+   RESET
+   ================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background:   var(--bg);
+  color:        var(--text);
+  font-family:  var(--font-body);
+  font-size:    15px;
+  line-height:  1.7;
+  overflow-x:   hidden;
+  min-height:   100vh;
+}
+
+img, video { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font-family: var(--font-body); }
+
+/* NOISE OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ================================================
+   НАВІГАЦІЯ
+   ================================================ */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(10,10,15,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  height: var(--nav-height);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+  margin-right: auto;
+  letter-spacing: -0.01em;
+}
+.nav-logo span { color: var(--green); }
+
+.nav a {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.nav a:hover  { color: var(--text); }
+.nav a.active { color: var(--text); font-weight: 600; }
+
+.nav-highlight { color: var(--green) !important; font-weight: 600 !important; }
+.nav-cta {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 6px 16px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: #fff !important;
+  transition: opacity 0.2s !important;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ================================================
+   КОНТЕЙНЕР
+   ================================================ */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+section { padding: var(--section-padding); }
+
+.section-dark {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: var(--section-padding);
+}
+
+/* ================================================
+   ТИПОГРАФІКА
+   ================================================ */
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.desc {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+/* ================================================
+   КНОПКИ
+   ================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: var(--r-pill);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { opacity: 0.85; transform: translateY(-1px); color: #fff; }
+
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  padding: 6px 16px;
+}
+.btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+.btn-green  { background: var(--green);  color: #000; }
+.btn-green:hover { opacity: 0.85; color: #000; }
+
+/* ================================================
+   КАРТКИ
+   ================================================ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  transition: border-color 0.2s, transform 0.2s;
+}
+.card:hover {
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+}
+
+.card-inner {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+}
+
+/* ================================================
+   БЕЙДЖІ / ТЕГИ
+   ================================================ */
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+}
+
+.tag {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: var(--surface2);
+  transition: all 0.2s;
+  cursor: default;
+}
+.tag:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+/* ================================================
+   ROADMAP / TIMELINE
+   ================================================ */
+.roadmap {
+  position: relative;
+  padding: 1rem 0;
+}
+.roadmap::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--border) 10%,
+    var(--border) 90%,
+    transparent
+  );
+}
+.roadmap-item {
+  position: relative;
+  padding-left: 72px;
+  margin-bottom: 1.5rem;
+}
+.roadmap-dot {
+  position: absolute;
+  left: 20px;
+  top: 22px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background: var(--bg);
+  z-index: 1;
+}
+
+/* ================================================
+   АКОРДЕОН
+   ================================================ */
+.accordion {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.accordion:hover { border-color: rgba(255,255,255,0.13); }
+
+.accordion-header {
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.accordion-header:hover { background: rgba(255,255,255,0.02); }
+
+.accordion-chevron {
+  font-size: 11px;
+  color: var(--muted);
+  transition: transform 0.3s;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.accordion-chevron.open { transform: rotate(180deg); }
+
+.accordion-body {
+  display: none;
+  padding: 0 22px 22px;
+  border-top: 1px solid var(--border);
+}
+.accordion-body.open { display: block; }
+
+/* ================================================
+   GRID СІТКИ
+   ================================================ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 14px; }
+.grid-mini { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px; }
+
+/* ================================================
+   СХЕМА-БОКСІ (формули, теорія)
+   ================================================ */
+.schema {
+  background: var(--surface2);
+  border-radius: var(--r-md);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  border-left: 3px solid var(--accent);
+}
+.schema-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.formula {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  background: rgba(0,0,0,0.3);
+  color: var(--green);
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin: 4px 0;
+  display: inline-block;
+}
+
+/* ================================================
+   ПІДКАЗКИ
+   ================================================ */
+.tip {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 11px 14px;
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.tip-icon { font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+.tip-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.tip-text strong { color: var(--text); font-weight: 600; }
+
+/* ================================================
+   ПРОГРЕС БАР
+   ================================================ */
+.progress {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* ================================================
+   DIVIDER
+   ================================================ */
+.divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+/* ================================================
+   FOOTER
+   ================================================ */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 8px;
+  text-decoration: none;
+}
+
+/* ================================================
+   АНІМАЦІЇ
+   ================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.6; transform: scale(1.1); }
+}
+@keyframes bounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-8px); }
+}
+
+.fade-up   { animation: fadeUp 0.6s ease both; }
+.fade-up-1 { animation: fadeUp 0.6s ease 0.1s both; }
+.fade-up-2 { animation: fadeUp 0.6s ease 0.2s both; }
+.fade-up-3 { animation: fadeUp 0.6s ease 0.3s both; }
+.fade-up-4 { animation: fadeUp 0.6s ease 0.4s both; }
+
+/* Scroll анімація */
+.anim {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.anim.visible { opacity: 1; transform: translateY(0); }
+
+/* Glow елементи */
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ================================================
+   АДАПТИВНІСТЬ
+   ================================================ */
+@media (max-width: 768px) {
+  :root { --section-padding: 3rem 0; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .grid-mini { grid-template-columns: 1fr 1fr; }
+  .nav { padding: 0 1rem; gap: 1rem; }
+  .nav a:not(.nav-logo):not(.nav-cta) { display: none; }
+}
+@media (max-width: 480px) {
+  .grid-mini { grid-template-columns: 1fr; }
+  .title { font-size: 1.8rem; }
+}
+
+
+
+
+
+
+
+
+
+/* ── карта позицій ──────────────────────────────── */
+
+
+
+/* ================================================
+   ROLES-MAP.CSS — Карта позицій маркетолога
+   Підключати: в index.css або окремим файлом
+   ================================================ */
+
+/* ── CSS ЗМІННІ ДЛЯ НОВИХ КОЛЬОРІВ ──────────────
+   Додати до :root в main.css поряд з --track-*
+   ──────────────────────────────────────────────── */
+/*
+  --role-digital-bg:     rgb(12, 68, 124);
+  --role-digital-border: rgb(133, 183, 235);
+  --role-digital-text:   rgb(181, 212, 244);
+
+  --role-brand-bg:       rgb(60, 52, 137);
+  --role-brand-border:   rgb(175, 169, 236);
+  --role-brand-text:     rgb(206, 203, 246);
+
+  --role-trade-bg:       rgb(8, 80, 65);
+  --role-trade-border:   rgb(93, 202, 165);
+  --role-trade-text:     rgb(159, 225, 203);
+
+  --role-content-bg:     rgb(99, 56, 6);
+  --role-content-border: rgb(239, 159, 39);
+  --role-content-text:   rgb(250, 199, 117);
+
+  --role-product-bg:     rgb(113, 43, 19);
+  --role-product-border: rgb(240, 153, 123);
+  --role-product-text:   rgb(245, 196, 179);
+
+  --role-growth-bg:      rgb(39, 80, 10);
+  --role-growth-border:  rgb(151, 196, 89);
+  --role-growth-text:    rgb(192, 221, 151);
+
+  --role-neutral-bg:     rgb(68, 68, 65);
+  --role-neutral-border: rgb(180, 178, 169);
+  --role-neutral-text:   rgb(211, 209, 199);
+*/
+
+/* ── СЕКЦІЯ ─────────────────────────────────────── */
+.roles-section { padding: var(--section-padding); }
+
+/* ── СІТКА КОЛОНОК ──────────────────────────────── */
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 0;
+}
+
+.roles-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0;
+  position: relative;
+}
+
+/* ── КОЛОНКА ─────────────────────────────────────── */
+.roles-col { display: flex; flex-direction: column; gap: 6px; }
+.roles-list { display: flex; flex-direction: column; gap: 6px; }
+
+/* ── КАТЕГОРІЯ (заголовок групи) ─────────────────── */
+.roles-category {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.roles-category--digital {
+  background: rgb(12, 68, 124);
+  border: 0.5px solid rgb(133, 183, 235);
+  color: rgb(181, 212, 244);
+}
+.roles-category--brand {
+  background: rgb(60, 52, 137);
+  border: 0.5px solid rgb(175, 169, 236);
+  color: rgb(206, 203, 246);
+}
+.roles-category--trade {
+  background: rgb(8, 80, 65);
+  border: 0.5px solid rgb(93, 202, 165);
+  color: rgb(159, 225, 203);
+}
+.roles-category--content {
+  background: rgb(99, 56, 6);
+  border: 0.5px solid rgb(239, 159, 39);
+  color: rgb(250, 199, 117);
+}
+.roles-category--product {
+  background: rgb(113, 43, 19);
+  border: 0.5px solid rgb(240, 153, 123);
+  color: rgb(245, 196, 179);
+}
+.roles-category--growth {
+  background: rgb(39, 80, 10);
+  border: 0.5px solid rgb(151, 196, 89);
+  color: rgb(192, 221, 151);
+}
+
+/* ── КАРТКА РОЛІ ─────────────────────────────────── */
+.role-card {
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px 14px;
+  border-radius: var(--r-sm);
+  border: 0.5px solid;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1.4;
+}
+
+/* Digital */
+.role-card--digital {
+  background: rgb(12, 68, 124);
+  border-color: rgb(133, 183, 235);
+  color: rgb(181, 212, 244);
+}
+.role-card--digital:hover {
+  background: rgb(18, 90, 160);
+  border-color: rgb(181, 212, 244);
+}
+
+/* Brand */
+.role-card--brand {
+  background: rgb(60, 52, 137);
+  border-color: rgb(175, 169, 236);
+  color: rgb(206, 203, 246);
+}
+.role-card--brand:hover {
+  background: rgb(80, 70, 170);
+  border-color: rgb(206, 203, 246);
+}
+
+/* Trade */
+.role-card--trade {
+  background: rgb(8, 80, 65);
+  border-color: rgb(93, 202, 165);
+  color: rgb(159, 225, 203);
+}
+.role-card--trade:hover {
+  background: rgb(12, 110, 88);
+  border-color: rgb(159, 225, 203);
+}
+
+/* Content */
+.role-card--content {
+  background: rgb(99, 56, 6);
+  border-color: rgb(239, 159, 39);
+  color: rgb(250, 199, 117);
+}
+.role-card--content:hover {
+  background: rgb(130, 74, 8);
+  border-color: rgb(250, 199, 117);
+}
+
+/* Product */
+.role-card--product {
+  background: rgb(113, 43, 19);
+  border-color: rgb(240, 153, 123);
+  color: rgb(245, 196, 179);
+}
+.role-card--product:hover {
+  background: rgb(145, 55, 24);
+  border-color: rgb(245, 196, 179);
+}
+
+/* Growth */
+.role-card--growth {
+  background: rgb(39, 80, 10);
+  border-color: rgb(151, 196, 89);
+  color: rgb(192, 221, 151);
+}
+.role-card--growth:hover {
+  background: rgb(52, 106, 13);
+  border-color: rgb(192, 221, 151);
+}
+
+/* Level / Format / Niche — нейтральні */
+.role-card--level,
+.role-card--format,
+.role-card--niche {
+  background: rgb(68, 68, 65);
+  border-color: rgb(180, 178, 169);
+  color: rgb(211, 209, 199);
+}
+.role-card--level:hover,
+.role-card--format:hover,
+.role-card--niche:hover {
+  background: rgb(90, 90, 86);
+  border-color: rgb(211, 209, 199);
+}
+
+/* ── МЕТА БЛОК (рівень, формат, ніша) ───────────── */
+.roles-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.roles-meta-col { display: flex; flex-direction: column; gap: 6px; }
+
+.roles-meta-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.roles-meta-list { display: flex; flex-direction: column; gap: 6px; }
+
+/* ── МОДАЛЬНЕ ВІКНО ──────────────────────────────── */
+.role-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+}
+.role-modal--open { display: flex; }
+
+.role-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.role-modal__box {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 2rem;
+  max-width: 600px;
+  width: calc(100% - 2rem);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.role-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  color: var(--muted);
+  font-size: 12px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: color 0.2s;
+}
+.role-modal__close:hover { color: var(--text); }
+
+.role-modal__body {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
+.role-modal__loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.role-modal__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── RESPONSIVE ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .roles-grid      { grid-template-columns: 1fr; gap: 24px; }
+  .roles-meta-grid { grid-template-columns: 1fr; gap: 20px; }
+}
+@media (max-width: 480px) {
+  .role-modal__box { padding: 1.5rem; }
+}

@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Модуль 3 — Мистецтво промптів | AI Скрізь</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080a0f;
+    --surface: #0f1117;
+    --surface2: #161922;
+    --surface3: #1d2130;
+    --border: rgba(255,255,255,0.06);
+    --border2: rgba(255,255,255,0.1);
+    --accent: #6366f1;
+    --accent2: #a78bfa;
+    --accent3: #22d3ee;
+    --green: #4ade80;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --orange: #fb923c;
+    --text: #dde1f0;
+    --muted: #6b7280;
+    --heading: #f1f5f9;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'Golos Text',sans-serif; font-size:16px; line-height:1.75; }
+
+  /* Grid background */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(99,102,241,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events:none; z-index:0;
+  }
+
+  .wrap { max-width:880px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+
+  /* NAV */
+  .course-nav {
+    border-bottom:1px solid var(--border);
+    padding:16px 0;
+    position:sticky; top:0; z-index:100;
+    background:rgba(8,10,15,0.94);
+    backdrop-filter:blur(16px);
+  }
+  .course-nav .wrap { display:flex; align-items:center; justify-content:space-between; }
+  .course-logo { font-family:'Unbounded',sans-serif; font-size:13px; font-weight:700; color:var(--heading); letter-spacing:.05em; }
+  .course-logo span { color:var(--accent2); }
+  .module-badge { font-size:11px; font-weight:600; color:var(--accent2); background:rgba(167,139,250,.12); padding:4px 12px; border-radius:20px; letter-spacing:.03em; }
+
+  /* HERO */
+  .hero { padding:80px 0 64px; border-bottom:1px solid var(--border); }
+  .hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent3); margin-bottom:28px; }
+  .hero-eyebrow::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--accent3); animation:blink 2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .hero h1 { font-family:'Unbounded',sans-serif; font-size:clamp(30px,4.5vw,52px); font-weight:900; color:var(--heading); line-height:1.08; margin-bottom:24px; letter-spacing:-.025em; }
+  .hero h1 .grad { background:linear-gradient(100deg,var(--accent) 0%,var(--accent2) 50%,var(--accent3) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .hero-lead { font-size:18px; color:var(--muted); max-width:620px; line-height:1.65; margin-bottom:36px; }
+  .hero-meta { display:flex; gap:24px; flex-wrap:wrap; margin-bottom:40px; }
+  .meta-chip { font-size:13px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+
+  /* PROGRESS */
+  .progress-track { height:2px; background:var(--surface3); border-radius:2px; overflow:hidden; }
+  .progress-fill { height:100%; width:43%; background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3)); border-radius:2px; }
+  .progress-lbl { font-size:11px; color:var(--muted); margin-top:6px; }
+
+  /* SECTIONS */
+  section { padding:72px 0; border-bottom:1px solid var(--border); }
+  .eyebrow { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; }
+  h2 { font-family:'Unbounded',sans-serif; font-size:clamp(20px,2.8vw,30px); font-weight:700; color:var(--heading); line-height:1.2; margin-bottom:16px; letter-spacing:-.02em; }
+  h3 { font-family:'Unbounded',sans-serif; font-size:16px; font-weight:700; color:var(--heading); line-height:1.3; margin-bottom:10px; letter-spacing:-.01em; }
+  p { margin-bottom:14px; color:var(--text); }
+  p:last-child { margin-bottom:0; }
+  strong { color:var(--heading); font-weight:600; }
+
+  /* ANATOMY BLOCK */
+  .anatomy {
+    background:var(--surface);
+    border:1px solid var(--border2);
+    border-radius:16px;
+    overflow:hidden;
+    margin:28px 0;
+  }
+  .anatomy-header { background:var(--surface2); padding:14px 24px; font-size:12px; font-weight:600; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; border-bottom:1px solid var(--border); }
+  .anatomy-body { padding:28px; }
+  .anatomy-formula {
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    margin-bottom:28px;
+  }
+  .formula-part {
+    padding:8px 16px;
+    border-radius:8px;
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:500;
+    white-space:nowrap;
+  }
+  .fp-role { background:rgba(99,102,241,.2); color:#a5b4fc; border:1px solid rgba(99,102,241,.3); }
+  .fp-task { background:rgba(34,211,238,.2); color:#67e8f9; border:1px solid rgba(34,211,238,.3); }
+  .fp-ctx  { background:rgba(251,191,36,.2); color:#fde68a; border:1px solid rgba(251,191,36,.3); }
+  .fp-fmt  { background:rgba(74,222,128,.2); color:#86efac; border:1px solid rgba(74,222,128,.3); }
+  .fp-plus { font-size:18px; color:var(--muted); }
+  .formula-legend { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:10px; }
+  .legend-item { display:flex; align-items:flex-start; gap:10px; }
+  .legend-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; margin-top:5px; }
+  .legend-text { font-size:13px; color:var(--text); line-height:1.45; }
+  .legend-text strong { display:block; font-size:12px; margin-bottom:2px; }
+
+  /* COMPARE CARDS */
+  .compare { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:24px 0; }
+  .compare-card { border-radius:14px; overflow:hidden; }
+  .compare-card.bad { border:1px solid rgba(248,113,113,.2); }
+  .compare-card.good { border:1px solid rgba(74,222,128,.2); }
+  .compare-head {
+    padding:10px 16px; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    display:flex; align-items:center; gap:8px;
+  }
+  .compare-head.bad { background:rgba(248,113,113,.1); color:var(--red); border-bottom:1px solid rgba(248,113,113,.15); }
+  .compare-head.good { background:rgba(74,222,128,.1); color:var(--green); border-bottom:1px solid rgba(74,222,128,.15); }
+  .compare-body { padding:16px; font-family:var(--mono); font-size:13px; line-height:1.6; color:var(--text); background:var(--surface); }
+  .compare-result { padding:10px 16px; font-size:12px; color:var(--muted); background:var(--surface2); border-top:1px solid var(--border); line-height:1.5; }
+
+  /* TECHNIQUE CARDS */
+  .technique-list { display:flex; flex-direction:column; gap:0; margin-top:24px; border:1px solid var(--border2); border-radius:16px; overflow:hidden; }
+  .technique-item { display:grid; grid-template-columns:260px 1fr; border-bottom:1px solid var(--border); }
+  .technique-item:last-child { border-bottom:none; }
+  .technique-left { padding:24px; border-right:1px solid var(--border); background:var(--surface); }
+  .technique-tag {
+    display:inline-block; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    padding:3px 8px; border-radius:4px; margin-bottom:10px;
+  }
+  .tag-basic   { background:rgba(99,102,241,.15); color:#a5b4fc; }
+  .tag-mid     { background:rgba(251,191,36,.15); color:#fde68a; }
+  .tag-advanced{ background:rgba(251,146,60,.15); color:#fdba74; }
+  .tag-pro     { background:rgba(239,68,68,.15); color:#fca5a5; }
+  .technique-name { font-family:'Unbounded',sans-serif; font-size:15px; font-weight:700; color:var(--heading); line-height:1.25; margin-bottom:6px; }
+  .technique-when { font-size:12px; color:var(--muted); line-height:1.5; }
+  .technique-right { padding:24px; }
+  .technique-desc { font-size:14px; color:var(--text); margin-bottom:14px; line-height:1.6; }
+  .prompt-block {
+    background:var(--surface2);
+    border:1px solid var(--border2);
+    border-radius:10px;
+    padding:16px 18px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    line-height:1.7;
+    color:#c4cfe8;
+    position:relative;
+  }
+  .prompt-block .comment { color:var(--muted); font-style:italic; }
+  .prompt-block .highlight { color:var(--accent3); }
+  .prompt-block .hl-yellow { color:var(--yellow); }
+  .prompt-block .hl-green { color:var(--green); }
+  .prompt-block .hl-purple { color:var(--accent2); }
+  .prompt-label {
+    position:absolute; top:-10px; left:14px;
+    font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    padding:2px 8px; border-radius:4px;
+  }
+  .lbl-bad  { background:rgba(248,113,113,.2); color:var(--red); }
+  .lbl-good { background:rgba(74,222,128,.2); color:var(--green); }
+  .lbl-example { background:rgba(99,102,241,.2); color:#a5b4fc; }
+  .technique-result {
+    margin-top:10px; font-size:12px; color:var(--muted);
+    padding:8px 12px; background:var(--surface); border-radius:8px; border-left:2px solid var(--accent2);
+  }
+
+  /* FRAMEWORK BLOCK */
+  .framework {
+    background:var(--surface);
+    border:1px solid var(--border2);
+    border-radius:16px;
+    overflow:hidden;
+    margin:24px 0;
+  }
+  .framework-head { background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(167,139,250,.08)); padding:20px 28px; border-bottom:1px solid var(--border); }
+  .framework-head h3 { font-size:18px; margin-bottom:4px; }
+  .framework-head p { font-size:13px; color:var(--muted); margin:0; }
+  .framework-steps { padding:24px 28px; display:flex; flex-direction:column; gap:0; }
+  .fw-step { display:grid; grid-template-columns:48px 1fr; gap:16px; padding:16px 0; border-bottom:1px solid var(--border); align-items:start; }
+  .fw-step:last-child { border-bottom:none; padding-bottom:0; }
+  .fw-letter {
+    width:40px; height:40px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Unbounded',sans-serif; font-size:15px; font-weight:900;
+    flex-shrink:0;
+  }
+  .fw-content {}
+  .fw-content strong { display:block; color:var(--heading); font-size:15px; margin-bottom:3px; }
+  .fw-content span { font-size:13px; color:var(--muted); line-height:1.5; }
+  .fw-content em { display:block; font-style:normal; font-family:var(--mono); font-size:12px; color:var(--accent3); margin-top:6px; padding:4px 10px; background:var(--surface2); border-radius:6px; border-left:2px solid var(--accent3); }
+
+  /* MISTAKES */
+  .mistakes-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin:24px 0; }
+  .mistake-card { background:var(--surface); border:1px solid rgba(248,113,113,.15); border-radius:12px; padding:20px; }
+  .mistake-icon { font-size:22px; margin-bottom:10px; }
+  .mistake-card h3 { font-size:14px; margin-bottom:8px; color:var(--red); }
+  .mistake-card p { font-size:13px; color:var(--muted); line-height:1.55; margin:0; }
+  .mistake-fix { font-size:12px; color:var(--green); margin-top:10px; padding:6px 10px; background:rgba(74,222,128,.07); border-radius:6px; border-left:2px solid var(--green); }
+
+  /* TEMPLATE LIBRARY */
+  .template-tabs { display:flex; gap:8px; margin-bottom:0; flex-wrap:wrap; }
+  .ttab {
+    padding:8px 16px; border-radius:8px 8px 0 0;
+    font-size:13px; font-weight:600;
+    cursor:pointer; border:1px solid var(--border); border-bottom:none;
+    background:var(--surface2); color:var(--muted);
+    transition:all .15s;
+  }
+  .ttab.active { background:var(--surface); color:var(--heading); border-color:var(--border2); }
+  .template-panel {
+    background:var(--surface);
+    border:1px solid var(--border2);
+    border-radius:0 12px 12px 12px;
+    padding:24px;
+    display:none;
+  }
+  .template-panel.active { display:block; }
+  .tpl-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:14px; }
+  .tpl-card {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; overflow:hidden;
+  }
+  .tpl-head { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+  .tpl-name { font-size:13px; font-weight:600; color:var(--heading); }
+  .tpl-copy { font-size:11px; color:var(--muted); cursor:pointer; padding:3px 8px; border:1px solid var(--border); border-radius:4px; transition:all .15s; }
+  .tpl-copy:hover { color:var(--accent2); border-color:var(--accent2); }
+  .tpl-body { padding:14px 16px; font-family:var(--mono); font-size:12px; line-height:1.7; color:#c4cfe8; }
+  .tpl-body .ph { color:var(--yellow); }
+
+  /* CHEAT-SHEET */
+  .cheat { background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(34,211,238,.05)); border:1px solid rgba(99,102,241,.2); border-radius:16px; padding:32px; margin:28px 0; }
+  .cheat h3 { font-size:18px; margin-bottom:20px; }
+  .cheat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+  .cheat-item { background:rgba(0,0,0,.3); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+  .cheat-item .label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--accent2); margin-bottom:6px; }
+  .cheat-item .value { font-family:var(--mono); font-size:12px; color:var(--accent3); line-height:1.6; }
+  .cheat-item .meaning { font-size:12px; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+  /* TAKEAWAYS */
+  .takeaways { background:var(--surface2); border:1px solid var(--border2); border-radius:14px; padding:32px; margin-top:24px; }
+  .tkl { list-style:none; display:flex; flex-direction:column; gap:10px; margin-top:14px; }
+  .tkl li { display:flex; align-items:flex-start; gap:12px; font-size:14px; line-height:1.55; }
+  .tkl li::before { content:'✓'; color:var(--green); font-weight:700; font-size:15px; flex-shrink:0; margin-top:1px; }
+
+  /* TASK */
+  .task-block { background:var(--surface); border:1px solid var(--border2); border-radius:14px; padding:32px; margin-top:24px; }
+  .task-badge { display:inline-flex; align-items:center; gap:6px; font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--yellow); background:rgba(251,191,36,.12); padding:4px 12px; border-radius:20px; margin-bottom:14px; }
+  .task-steps { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:14px; }
+  .task-steps li { display:flex; align-items:flex-start; gap:12px; font-size:14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:12px 14px; line-height:1.5; }
+  .task-steps li .n { font-family:'Unbounded',sans-serif; font-size:11px; font-weight:700; color:var(--accent); flex-shrink:0; margin-top:2px; }
+
+  /* MODULE NAV */
+  .module-nav { display:flex; justify-content:space-between; padding:48px 0 80px; gap:16px; }
+  .btn { display:inline-flex; align-items:center; gap:8px; font-family:'Unbounded',sans-serif; font-size:12px; font-weight:700; padding:14px 22px; border-radius:10px; text-decoration:none; letter-spacing:.02em; transition:all .2s; cursor:pointer; border:none; }
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-primary:hover { background:#4f46e5; }
+  .btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
+  .btn-ghost:hover { color:var(--text); }
+
+  /* CALLOUT */
+  .callout { background:var(--surface); border-left:3px solid var(--accent3); border-radius:0 12px 12px 0; padding:18px 24px; margin:20px 0; font-size:15px; color:var(--text); line-height:1.65; }
+
+  @media(max-width:700px) {
+    .compare { grid-template-columns:1fr; }
+    .technique-item { grid-template-columns:1fr; }
+    .technique-left { border-right:none; border-bottom:1px solid var(--border); }
+    .module-nav { flex-direction:column; }
+    .btn { width:100%; justify-content:center; }
+    .framework-steps { padding:16px; }
+    .tpl-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="course-nav">
+  <div class="wrap">
+    <div class="course-logo">AI <span>Скрізь</span></div>
+    <div class="module-badge">Модуль 3 з 7</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow">Модуль 3 — Промптинг</div>
+    <h1>Мистецтво<br><span class="grad">правильних промптів</span></h1>
+    <p class="hero-lead">
+      AI настільки хороший, наскільки хороше твоє питання. Цей модуль — від "просто запитав" до технік, якими користуються дослідники і топ-менеджери великих компаній.
+    </p>
+    <div class="hero-meta">
+      <div class="meta-chip">⏱ ~40 хвилин</div>
+      <div class="meta-chip">🔬 12 технік</div>
+      <div class="meta-chip">📋 20+ шаблонів</div>
+      <div class="meta-chip">⚡ Від базового до pro</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill"></div></div>
+    <div class="progress-lbl">Прогрес курсу: модуль 3 з 7</div>
+  </div>
+</div>
+
+<!-- ── SECTION 1: ЩО ТАКЕ ПРОМПТ ── -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Основи</div>
+    <h2>Що таке промпт і чому він вирішує все</h2>
+
+    <p>Промпт — це твій запит до AI. Але не просто питання. Це <strong>технічне завдання</strong>, яке визначає якість відповіді на 80%. Один і той самий AI дасть геніальну або жахливу відповідь залежно від того, як ти запитав.</p>
+
+    <div class="callout">
+      Уяви AI як надзвичайно розумного стажера без ініціативи. Він зробить рівно те, що ти сказав — не більше і не менше. Якщо завдання розмите — результат буде розмитим.
+    </div>
+
+    <p>Промпт має <strong>анатомію</strong>. Розуміння кожної частини дає контроль над результатом:</p>
+
+    <div class="anatomy">
+      <div class="anatomy-header">Анатомія ідеального промпту</div>
+      <div class="anatomy-body">
+        <div class="anatomy-formula">
+          <span class="formula-part fp-role">Роль</span>
+          <span class="fp-plus">+</span>
+          <span class="formula-part fp-task">Задача</span>
+          <span class="fp-plus">+</span>
+          <span class="formula-part fp-ctx">Контекст</span>
+          <span class="fp-plus">+</span>
+          <span class="formula-part fp-fmt">Формат</span>
+        </div>
+        <div class="formula-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#6366f1"></div>
+            <div class="legend-text"><strong style="color:#a5b4fc">Роль</strong>Хто зараз AI? Маркетолог, юрист, редактор, вчитель? Задає тон і глибину.</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#22d3ee"></div>
+            <div class="legend-text"><strong style="color:#67e8f9">Задача</strong>Що конкретно треба зробити? Дієслово + об'єкт. "Напиши", "проаналізуй", "склади список".</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#fbbf24"></div>
+            <div class="legend-text"><strong style="color:#fde68a">Контекст</strong>Для кого, навіщо, які обмеження? Чим більше релевантного контексту — тим точніший результат.</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#4ade80"></div>
+            <div class="legend-text"><strong style="color:#86efac">Формат</strong>Список, таблиця, абзац, 3 варіанти? Якщо не сказати — AI обере сам, не завжди вдало.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:32px">Поганий vs хороший промпт — реальна різниця</h3>
+
+    <div class="compare">
+      <div class="compare-card bad">
+        <div class="compare-head bad">✗ Слабкий промпт</div>
+        <div class="compare-body">Напиши пост про наш продукт</div>
+        <div class="compare-result">Результат: загальний маркетинговий текст, який не підходить нікуди</div>
+      </div>
+      <div class="compare-card good">
+        <div class="compare-head good">✓ Сильний промпт</div>
+        <div class="compare-body">Ти — досвідчений копірайтер для B2B SaaS. Напиши пост для LinkedIn (200 слів) про наш інструмент автоматизації звітів. Аудиторія — фінансові директори 30-50 років. Тон: діловий але без зайвого формалізму. Акцент на економію часу (2+ години на тиждень). Завершити закликом до дії — записатися на демо.</div>
+        <div class="compare-result">Результат: конкретний текст, готовий до публікації</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 2: БАЗОВІ ТЕХНІКИ ── -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Базові техніки</div>
+    <h2>Фундамент: 5 технік для кожного</h2>
+    <p>Ці техніки піднімуть якість відповідей у 2–3 рази без жодних технічних знань.</p>
+
+    <div class="technique-list">
+
+      <!-- 1. Role prompting -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-basic">Базова</span>
+          <div class="technique-name">Role Prompting</div>
+          <div class="technique-when">Коли: завжди, як перший крок</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Скажи AI, хто він є. Це активує в моделі "кластер знань" пов'язаних з цією роллю — стиль мовлення, глибину, пріоритети. Без ролі AI — генераліст. З роллю — спеціаліст.</div>
+          <div class="prompt-block" style="margin-bottom:10px">
+            <span class="prompt-label lbl-bad">Без ролі</span>
+            Розкажи про інвестиції в акції
+          </div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-good">З роллю</span>
+            <span class="hl-purple">Ти — досвідчений фінансовий радник з 15 роками практики.</span>
+            Поясни новачку ключові ризики інвестицій в акції. Без жаргону, з конкретними прикладами.
+          </div>
+          <div class="technique-result">💡 Чим конкретніша роль — тим кращий результат. "Ти — редактор The Economist" краще ніж "Ти — редактор"</div>
+        </div>
+      </div>
+
+      <!-- 2. Context bomb -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-basic">Базова</span>
+          <div class="technique-name">Контекстна бомба</div>
+          <div class="technique-when">Коли: складні або особисті задачі</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Завантажуй максимум релевантного контексту. AI не читає думки — він знає лише те, що ти написав. Що більше правильного контексту — то точніша відповідь.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-good">Приклад</span>
+            <span class="comment">// Контекст про бізнес</span>
+            <span class="hl-yellow">Мій бізнес:</span> онлайн-школа англійської для дорослих, 500+ учнів, середній чек $150/міс
+            <br><span class="hl-yellow">Проблема:</span> відтік учнів після 3-го місяця навчання (~40%)
+            <br><span class="hl-yellow">Ресурси:</span> маленька команда, бюджет до $500/міс на утримання
+            <br><span class="hl-yellow">Задача:</span> запропонуй 5 конкретних дій для зниження відтоку
+          </div>
+          <div class="technique-result">💡 Блок "Мій контекст:" на початку промпту — найпростіший спосіб покращити якість відповіді</div>
+        </div>
+      </div>
+
+      <!-- 3. Format control -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-basic">Базова</span>
+          <div class="technique-name">Контроль формату</div>
+          <div class="technique-when">Коли: потрібен конкретний вигляд результату</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">AI за замовчуванням обирає формат сам — зазвичай суцільний текст. Кажи точно: список, таблиця, кількість пунктів, довжина, структура.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-good">Приклад</span>
+            Проаналізуй переваги і недоліки роботи фрілансером.
+            <br><br><span class="hl-green">Формат відповіді:</span>
+            <br>- Таблиця 2 колонки: Переваги | Недоліки
+            <br>- По 5 пунктів в кожній колонці
+            <br>- Кожен пункт — 1 речення, конкретно і без води
+          </div>
+          <div class="technique-result">💡 Магічні слова: "Дай відповідь у вигляді...", "Обмеж до X пунктів", "Кожен пункт одним реченням"</div>
+        </div>
+      </div>
+
+      <!-- 4. Negative constraints -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-basic">Базова</span>
+          <div class="technique-name">Негативні обмеження</div>
+          <div class="technique-when">Коли: AI дає "не те" у відповідях</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Кажи AI не тільки що робити, але і чого НЕ робити. Це різко скорочує "воду", кліше і нерелевантний контент.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-good">Приклад</span>
+            Напиши мотиваційний пост про підприємництво.
+            <br><br><span class="hl-green">НЕ використовуй:</span>
+            <br>- Кліше ("успіх не приходить сам", "мрій і досягай")
+            <br>- Загальні фрази без конкретики
+            <br>- Емоджі
+            <br>- Заклик до дії в кінці
+          </div>
+          <div class="technique-result">💡 Блок "НЕ робити:" прибирає 90% типових AI-кліше. Особливо корисний для письма і контенту.</div>
+        </div>
+      </div>
+
+      <!-- 5. Step by step -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-basic">Базова</span>
+          <div class="technique-name">Покроковий запит</div>
+          <div class="technique-when">Коли: складна задача з багатьма частинами</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Розбивай складне завдання на послідовні кроки прямо в промпті. Або проси AI вирішувати покроково — це значно підвищує точність для логічних задач.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-good">Приклад</span>
+            Допоможи мені підготуватися до переговорів про підвищення зарплати.
+            <br><br><span class="hl-green">Зроби це покроково:</span>
+            <br><span class="highlight">Крок 1:</span> Запитай мене про мою ситуацію (посада, стаж, ринок)
+            <br><span class="highlight">Крок 2:</span> Оціни мою позицію і визнач сильні аргументи
+            <br><span class="highlight">Крок 3:</span> Склади скрипт розмови з керівником
+            <br><span class="highlight">Крок 4:</span> Підготуй відповіді на можливі заперечення
+          </div>
+          <div class="technique-result">💡 "Думай покроково" або "Let's think step by step" — магічна фраза, яка підвищує точність логічних відповідей</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 3: ПРОСУНУТІ ТЕХНІКИ ── -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Просунуті техніки</div>
+    <h2>Рівень вище: техніки дослідників і профі</h2>
+    <p>Ці техніки використовують AI-інженери, дослідники і ті, хто видає результати з AI, які здаються неможливими.</p>
+
+    <div class="technique-list">
+
+      <!-- Chain of thought -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-mid">Середній</span>
+          <div class="technique-name">Chain of Thought</div>
+          <div class="technique-when">Коли: логічні задачі, математика, аналіз</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Просиш AI показати хід міркування, а не одразу давати відповідь. Схоже на те, як математик показує кожен крок рішення. Зменшує помилки на 40–60% у складних задачах.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-example">Шаблон</span>
+            [Задача]
+            <br><br><span class="hl-green">Перед відповіддю:</span>
+            <br>1. Розбери задачу на складові
+            <br>2. Поміркуй вголос про кожну частину
+            <br>3. Потім дай фінальну відповідь
+            <br><br><span class="comment">// Або просто додай в кінці:</span>
+            <br><span class="hl-purple">Думай крок за кроком, показуй хід міркування.</span>
+          </div>
+          <div class="technique-result">💡 Для математики, логічних пазлів, юридичного аналізу, фінансових розрахунків — обов'язкова техніка</div>
+        </div>
+      </div>
+
+      <!-- Few-shot -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-mid">Середній</span>
+          <div class="technique-name">Few-Shot Prompting</div>
+          <div class="technique-when">Коли: потрібен конкретний стиль або формат</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Даєш AI 2–3 приклади того, що хочеш отримати. Модель "вчиться" на прикладах прямо в промпті. Найефективніший спосіб задати стиль письма або структуру.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-example">Приклад</span>
+            Пиши заголовки для статей в моєму стилі.
+            <br><br><span class="hl-yellow">Мої приклади:</span>
+            <br>"Чому 90% стартапів провалюються в перший рік (і що з цим робити)"
+            <br>"Я витратив $10 000 на рекламу і ось що дізнався"
+            <br>"5 питань, які треба поставити клієнту до підписання договору"
+            <br><br><span class="hl-green">Тема нової статті:</span> управління часом для підприємців
+            <br><span class="hl-green">Завдання:</span> напиши 5 заголовків в тому самому стилі
+          </div>
+          <div class="technique-result">💡 Ніяке словесне пояснення стилю не працює так добре, як реальні приклади. Давай 2–5 зразків.</div>
+        </div>
+      </div>
+
+      <!-- Persona -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-mid">Середній</span>
+          <div class="technique-name">Persona Method</div>
+          <div class="technique-when">Коли: потрібна точка зору конкретної людини</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Задаєш не просто роль, а повноцінну персону з бекграундом, цінностями і точкою зору. AI буквально "думає" як ця людина.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-example">Приклад</span>
+            <span class="hl-purple">Ти — Олена, 38 років, маркетинг-директор FMCG компанії.</span>
+            <br>Освіта: MBA Київська школа економіки.
+            <br>Цінності: дані понад інтуїцію, ROI-орієнтованість, скептицизм до хайпу.
+            <br>Болі: обмежений бюджет, тиск від CEO, команда 5 осіб.
+            <br><br>З позиції Олени: оціни нашу пропозицію впровадити AI в email-маркетинг.
+            <br>Які питання вона задасть? Які заперечення виникнуть?
+          </div>
+          <div class="technique-result">💡 Золото для маркетингу: "Подивися на наш продукт очима [ідеальний клієнт]. Які заперечення виникнуть?"</div>
+        </div>
+      </div>
+
+      <!-- Devil's advocate -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-advanced">Просунутий</span>
+          <div class="technique-name">Devil's Advocate</div>
+          <div class="technique-when">Коли: треба перевірити ідею або рішення</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Просиш AI активно заперечувати твою ідею, шукати слабкі місця, грати роль скептика. Найкращий спосіб виявити проблеми ДО їх виникнення.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-example">Приклад</span>
+            Я планую відкрити кав'ярню в бізнес-центрі, середній чек $8, 80 місць.
+            <br><br><span class="hl-green">Твоя роль:</span> досвідчений інвестор, який бачив 50+ провалених ресторанних бізнесів.
+            <br>Будь безжальним скептиком. Знайди всі слабкі місця в моєму плані.
+            <br>Не пом'якшуй критику. Я хочу знайти проблеми зараз, а не після відкриття.
+          </div>
+          <div class="technique-result">💡 Після Devil's Advocate: "Тепер запропонуй як усунути кожен із знайдених ризиків"</div>
+        </div>
+      </div>
+
+      <!-- Multi-perspective -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-advanced">Просунутий</span>
+          <div class="technique-name">Multi-Perspective</div>
+          <div class="technique-when">Коли: складне рішення, потрібні різні точки зору</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Просиш AI розглянути питання з кількох принципово різних точок зору одночасно. Дає об'ємне розуміння, яке неможливо отримати від одного експерта.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-example">Приклад</span>
+            Питання: чи варто нашій компанії переходити на 4-денний робочий тиждень?
+            <br><br><span class="hl-green">Розглянь з позицій:</span>
+            <br><span class="highlight">1. CEO</span> (продуктивність, витрати, конкурентність)
+            <br><span class="highlight">2. HR-директора</span> (рекрутинг, утримання, культура)
+            <br><span class="highlight">3. Рядового співробітника</span> (баланс, стрес, мотивація)
+            <br><span class="highlight">4. Клієнта</span> (доступність, якість сервісу)
+            <br><br>Для кожної позиції: 2–3 аргументи "за" і "проти"
+          </div>
+          <div class="technique-result">💡 Ідеально для стратегічних рішень, де є стейкхолдери з різними інтересами</div>
+        </div>
+      </div>
+
+      <!-- Recursive refinement -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-advanced">Просунутий</span>
+          <div class="technique-name">Recursive Refinement</div>
+          <div class="technique-when">Коли: результат хороший, але не ідеальний</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Ітеративне покращення — просиш AI критикувати і покращувати власну відповідь. Замість того щоб переписувати промпт — запускаєш петлю самовдосконалення.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-example">Послідовність</span>
+            <span class="comment">// Крок 1: отримай першу версію</span>
+            Напиши [текст/план/рішення]
+            <br><br><span class="comment">// Крок 2: самооцінка</span>
+            <span class="hl-green">Оціни свою відповідь за критеріями:</span>
+            <br>- Конкретність (1-10)
+            <br>- Оригінальність (1-10)
+            <br>- Практична цінність (1-10)
+            <br>Де найбільші слабкі місця?
+            <br><br><span class="comment">// Крок 3: покращення</span>
+            <span class="hl-purple">Тепер напиши значно покращену версію, усунувши всі виявлені слабкості.</span>
+          </div>
+          <div class="technique-result">💡 2–3 ітерації зазвичай дають якість, яку неможливо отримати за один запит</div>
+        </div>
+      </div>
+
+      <!-- Constraint forcing -->
+      <div class="technique-item">
+        <div class="technique-left">
+          <span class="technique-tag tag-pro">Pro</span>
+          <div class="technique-name">Constraint Forcing</div>
+          <div class="technique-when">Коли: потрібна нестандартна ідея або рішення</div>
+        </div>
+        <div class="technique-right">
+          <div class="technique-desc">Штучні обмеження змушують AI виходити за межі очевидних відповідей. Парадоксально: менше свободи — більш оригінальний результат.</div>
+          <div class="prompt-block">
+            <span class="prompt-label lbl-example">Приклади</span>
+            <span class="hl-yellow">Обмеження бюджету:</span>
+            <br>"Як збільшити продажі на 30% якщо маркетинговий бюджет = $0?"
+            <br><br><span class="hl-yellow">Обмеження часу:</span>
+            <br>"Що можна зробити для покращення клієнтського сервісу за наступні 24 години?"
+            <br><br><span class="hl-yellow">Обмеження ресурсів:</span>
+            <br>"Поясни квантову фізику якщо тобі можна використати тільки 10 найпоширеніших слів"
+          </div>
+          <div class="technique-result">💡 Краще для мозкового штурму, ніж "дай 10 ідей". Обмеження вбивають кліше.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 4: FRAMEWORK ── -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Система</div>
+    <h2>Фреймворк RACT для будь-якого промпту</h2>
+    <p>Запам'ятай цей фреймворк — і більше ніколи не думатимеш "як правильно спитати".</p>
+
+    <div class="framework">
+      <div class="framework-head">
+        <h3>RACT Framework</h3>
+        <p>Role · Action · Context · Tone — чотири елементи ідеального промпту</p>
+      </div>
+      <div class="framework-steps">
+        <div class="fw-step">
+          <div class="fw-letter" style="background:rgba(99,102,241,.15);color:#a5b4fc">R</div>
+          <div class="fw-content">
+            <strong>Role — Роль</strong>
+            <span>Хто зараз AI? Задай конкретну роль з досвідом. Чим детальніше — тим краще.</span>
+            <em>"Ти — досвідчений SEO-спеціаліст з 10 роками роботи в e-commerce"</em>
+          </div>
+        </div>
+        <div class="fw-step">
+          <div class="fw-letter" style="background:rgba(34,211,238,.15);color:#67e8f9">A</div>
+          <div class="fw-content">
+            <strong>Action — Дія</strong>
+            <span>Що конкретно треба зробити? Чіткий дієслівний запит. Один запит — одна дія.</span>
+            <em>"Проаналізуй і склади список з 10 рекомендацій"</em>
+          </div>
+        </div>
+        <div class="fw-step">
+          <div class="fw-letter" style="background:rgba(251,191,36,.15);color:#fde68a">C</div>
+          <div class="fw-content">
+            <strong>Context — Контекст</strong>
+            <span>Для кого, навіщо, що вже є, які обмеження. Все що допоможе AI зрозуміти ситуацію.</span>
+            <em>"Інтернет-магазин жіночого одягу, 500 SKU, аудиторія 25-40 років, конкурент — ZARA"</em>
+          </div>
+        </div>
+        <div class="fw-step">
+          <div class="fw-letter" style="background:rgba(74,222,128,.15);color:#86efac">T</div>
+          <div class="fw-content">
+            <strong>Tone — Тон і формат</strong>
+            <span>Стиль відповіді, структура, довжина, тон спілкування і чого НЕ робити.</span>
+            <em>"Список з 10 пунктів, діловий тон, без жаргону, кожен пункт — 2 речення"</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 5: ПОМИЛКИ ── -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Типові помилки</div>
+    <h2>7 помилок, які вбивають якість відповідей</h2>
+
+    <div class="mistakes-grid">
+      <div class="mistake-card">
+        <div class="mistake-icon">🌫️</div>
+        <h3>Розмитий запит</h3>
+        <p>"Допоможи з бізнесом" — AI не знає, що це означає.</p>
+        <div class="mistake-fix">✓ Конкретна задача: "Допоможи скласти цінову стратегію для B2B SaaS з LTV $2000"</div>
+      </div>
+      <div class="mistake-card">
+        <div class="mistake-icon">📦</div>
+        <h3>Все в одному промпті</h3>
+        <p>Запитувати 5 різних речей одночасно — AI розмазує увагу на всі.</p>
+        <div class="mistake-fix">✓ Один промпт = одна задача. Розбий на послідовні кроки.</div>
+      </div>
+      <div class="mistake-card">
+        <div class="mistake-icon">🔄</div>
+        <h3>Не уточнювати результат</h3>
+        <p>Отримав погану відповідь — і пишеш новий промпт з нуля замість уточнення.</p>
+        <div class="mistake-fix">✓ "Це не те що я мав на увазі. Конкретно хочу: [уточнення]"</div>
+      </div>
+      <div class="mistake-card">
+        <div class="mistake-icon">👻</div>
+        <h3>Забути про аудиторію</h3>
+        <p>Не сказати для кого пишеться — AI пише "для всіх", тобто ні для кого.</p>
+        <div class="mistake-fix">✓ Завжди додавай: "Аудиторія: [опис]" або "Читач — це [хто]"</div>
+      </div>
+      <div class="mistake-card">
+        <div class="mistake-icon">✅</div>
+        <h3>Приймати першу відповідь</h3>
+        <p>Перша відповідь AI — часто хороша, але рідко найкраща. Ітерація = якість.</p>
+        <div class="mistake-fix">✓ Після першої відповіді: "Покращ, зроби більш конкретним і скороти на 30%"</div>
+      </div>
+      <div class="mistake-card">
+        <div class="mistake-icon">🎭</div>
+        <h3>Не давати приклади</h3>
+        <p>Описувати стиль словами — неточно. Показати приклад — набагато ефективніше.</p>
+        <div class="mistake-fix">✓ Few-shot: дай 2–3 приклади бажаного результату перед запитом</div>
+      </div>
+      <div class="mistake-card">
+        <div class="mistake-icon">📏</div>
+        <h3>Не вказати довжину</h3>
+        <p>AI за замовчуванням пише довго. Часто потрібно 3 речення, а не 5 абзаців.</p>
+        <div class="mistake-fix">✓ "Дай відповідь в 3–5 реченнях" або "До 150 слів" або "Одним абзацом"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 6: ШАБЛОНИ ── -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Бібліотека шаблонів</div>
+    <h2>Готові промпти для реальних задач</h2>
+    <p>Скопіюй, заміни <span style="color:var(--yellow);font-family:var(--mono)">[змінні]</span> і використовуй одразу.</p>
+
+    <div style="margin-top:24px">
+      <div class="template-tabs">
+        <div class="ttab active" onclick="showTab('content')">✍️ Контент</div>
+        <div class="ttab" onclick="showTab('business')">💼 Бізнес</div>
+        <div class="ttab" onclick="showTab('analysis')">📊 Аналіз</div>
+        <div class="ttab" onclick="showTab('personal')">🎯 Особисте</div>
+      </div>
+
+      <!-- CONTENT TAB -->
+      <div class="template-panel active" id="tab-content">
+        <div class="tpl-grid">
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Пост для соцмереж</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Ти — досвідчений SMM-спеціаліст. Напиши пост для <span class="ph">[Instagram/LinkedIn/Telegram]</span> про <span class="ph">[тему]</span>. Аудиторія: <span class="ph">[опис аудиторії]</span>. Тон: <span class="ph">[серйозний/дружній/провокаційний]</span>. Довжина: <span class="ph">[коротко до 100 слів / середньо 150-200]</span>. Без кліше і загальних фраз. Заверши <span class="ph">[питанням до аудиторії / закликом до дії / strong statement]</span>.</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Email-розсилка</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Ти — email-маркетолог. Напиши лист для <span class="ph">[холодний outreach / прогрів / реактивація]</span>. Продукт: <span class="ph">[опис]</span>. Одержувач: <span class="ph">[посада, компанія, болі]</span>. Мета листа: <span class="ph">[отримати відповідь / записати на дзвінок / продати]</span>. Тема листа: зробить 3 варіанти. Довжина тіла: до 150 слів. Ніякого спаму і очевидних маніпуляцій.</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Заголовки статті (x10)</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Тема статті: <span class="ph">[тема]</span>. Аудиторія: <span class="ph">[хто читач]</span>. Придумай 10 заголовків в різних форматах: 3 заголовки з цифрами, 3 питальних, 2 провокаційних, 2 з обіцянкою результату. Кожен заголовок — окремий рядок. Уникай кліше і "розкриємо секрети".</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Редагування тексту</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Відредагуй мій текст. Зберіг мій стиль і голос. Виправ: граматику, пунктуацію, незграбні формулювання. Скороти на 20% без втрати змісту. Зроби речення більш динамічними там де є "вода". Не змінюй структуру і основні ідеї. Ось текст: <span class="ph">[вставити текст]</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUSINESS TAB -->
+      <div class="template-panel" id="tab-business">
+        <div class="tpl-grid">
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Аналіз конкурентів</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Ти — бізнес-аналітик. Проаналізуй конкурентів для <span class="ph">[мій продукт/бізнес]</span>. Конкуренти: <span class="ph">[список]</span>. Для кожного: позиціонування, ціни, сильні/слабкі сторони, ЦА. Формат: порівняльна таблиця. В кінці: де є незайнята ніша і як я можу її зайняти.</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Підготовка до переговорів</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Допоможи підготуватись до переговорів. Моя ціль: <span class="ph">[що хочу досягти]</span>. Ситуація: <span class="ph">[контекст, хто інша сторона, що вони хочуть]</span>. Склади: 5 сильних аргументів на мою користь, 3 можливих заперечення і як на них відповідати, батна (моя альтернатива якщо не домовимось).</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Pitch для інвестора</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Ти — досвідчений венчурний інвестор. Допоможи мені покращити pitch. Мій стартап: <span class="ph">[опис, стадія, метрики]</span>. Інвестор: <span class="ph">[хто, фокус фонду]</span>. Що йому важливо? Які питання він задасть? Як переформулювати мою пропозицію щоб вона резонувала з його критеріями?</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Важкий лист / комунікація</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Мені потрібно написати складний лист. Ситуація: <span class="ph">[контекст]</span>. Одержувач: <span class="ph">[хто, стосунки]</span>. Моя ціль: <span class="ph">[що хочу досягти]</span>. Тон: <span class="ph">[дипломатичний / прямий / вибачливий]</span>. Напиши 2 варіанти листа: м'якший і більш прямий. Я обиру потрібний.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYSIS TAB -->
+      <div class="template-panel" id="tab-analysis">
+        <div class="tpl-grid">
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Зворотній зв'язок на ідею</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Зіграй роль жорсткого, але справедливого ментора. Моя ідея: <span class="ph">[опис]</span>. Дай чесний фідбек: що сильно, що слабко, які ризики я не бачу, які припущення можуть виявитись хибними. Не пом'якшуй. Мені важливіша правда, ніж комфорт.</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">SWOT-аналіз</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Проведи SWOT-аналіз для <span class="ph">[компанія / продукт / рішення]</span>. Контекст: <span class="ph">[галузь, розмір, ринок]</span>. Формат: таблиця 2x2 з Strengths, Weaknesses, Opportunities, Threats. По 4–5 пунктів в кожному квадранті. Конкретно, без очевидних банальностей. В кінці: топ-3 пріоритети для дій на основі аналізу.</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Резюмування довгого тексту</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Прочитай текст і дай: 1) резюме в 3 реченнях (найголовніше), 2) список з 5 ключових ідей, 3) що я можу застосувати на практиці вже цього тижня. Ось текст: <span class="ph">[вставити текст]</span></div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Порівняння варіантів</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Допоможи обрати між варіантами. Варіанти: <span class="ph">[список]</span>. Критерії вибору: <span class="ph">[що важливо: ціна / час / ризик / масштабованість]</span>. Формат: таблиця порівняння по критеріях, потім чіткий висновок яку обрати і чому. Враховуй мій контекст: <span class="ph">[ситуація]</span>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PERSONAL TAB -->
+      <div class="template-panel" id="tab-personal">
+        <div class="tpl-grid">
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Підготовка до співбесіди</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Ти — HR-директор компанії <span class="ph">[назва]</span>. Я претендую на посаду <span class="ph">[посада]</span>. Мій досвід: <span class="ph">[коротко]</span>. Проведи зі мною mock-interview: задай 7 типових питань для цієї ролі, і після кожної моєї відповіді давай конструктивний фідбек.</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Навчання нової теми</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Поясни мені <span class="ph">[тема]</span> як <span class="ph">[рівень: повний новачок / є базові знання / хочу поглибити]</span>. Мій бекграунд: <span class="ph">[чим займаюсь]</span>. Використовуй аналогії з <span class="ph">[сфера яка мені близька]</span>. Після пояснення — дай 3 питання щоб я перевірив розуміння.</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">План розвитку навички</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Хочу навчитись <span class="ph">[навичка]</span>. Поточний рівень: <span class="ph">[нуль / початківець / середній]</span>. Є час: <span class="ph">[X годин на тиждень]</span>. Ціль за <span class="ph">[3/6/12 місяців]</span>: <span class="ph">[що хочу вміти]</span>. Склади конкретний покроковий план з ресурсами, дедлайнами і метриками прогресу.</div>
+          </div>
+          <div class="tpl-card">
+            <div class="tpl-head">
+              <div class="tpl-name">Прийняття важкого рішення</div>
+              <div class="tpl-copy" onclick="copyText(this)">Копіювати</div>
+            </div>
+            <div class="tpl-body">Мені треба прийняти рішення: <span class="ph">[опис дилеми]</span>. Варіанти: <span class="ph">[А і Б]</span>. Що мене зупиняє: <span class="ph">[страхи, невизначеності]</span>. Допоможи структурувати думки: плюси і мінуси кожного варіанту, які питання я маю собі поставити, які дані мені бракує щоб прийняти рішення впевнено.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 7: CHEAT SHEET ── -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Шпаргалка</div>
+    <h2>Довідник фраз-підсилювачів</h2>
+    <p>Додай ці фрази в будь-який промпт щоб різко покращити якість.</p>
+
+    <div class="cheat">
+      <h3>Фрази, які працюють</h3>
+      <div class="cheat-grid">
+        <div class="cheat-item">
+          <div class="label">Якість</div>
+          <div class="value">"Думай крок за кроком"</div>
+          <div class="meaning">Вмикає ланцюг міркувань, зменшує помилки</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Чесність</div>
+          <div class="value">"Не пом'якшуй правду"</div>
+          <div class="meaning">Прибирає дипломатичне "обмотування"</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Стиль</div>
+          <div class="value">"Без кліше та банальностей"</div>
+          <div class="meaning">Унікальний текст замість AI-шаблонів</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Варіанти</div>
+          <div class="value">"Дай 3 різних варіанти"</div>
+          <div class="meaning">Отримуєш спектр, а не одну точку</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Практика</div>
+          <div class="value">"Що я можу зробити вже сьогодні?"</div>
+          <div class="meaning">Переводить теорію в конкретні дії</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Глибина</div>
+          <div class="value">"Що ще я не врахував?"</div>
+          <div class="meaning">Виявляє сліпі зони і ризики</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Ітерація</div>
+          <div class="value">"Покращ і скороти на 30%"</div>
+          <div class="meaning">Стандартна команда рефайнменту</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Рівень</div>
+          <div class="value">"Поясни як 5-річній дитині"</div>
+          <div class="meaning">Максимальне спрощення складної теми</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Перевірка</div>
+          <div class="value">"Які припущення ти зробив?"</div>
+          <div class="meaning">Виявляє прихований bias у відповіді</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Протест</div>
+          <div class="value">"Заперечуй моє рішення"</div>
+          <div class="meaning">Devil's advocate одним реченням</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Конкретність</div>
+          <div class="value">"З конкретними прикладами і цифрами"</div>
+          <div class="meaning">Прибирає загальні фрази</div>
+        </div>
+        <div class="cheat-item">
+          <div class="label">Структура</div>
+          <div class="value">"Оформи як таблицю / список / план"</div>
+          <div class="meaning">Контроль формату результату</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TAKEAWAYS + TASK ── -->
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Підсумок</div>
+    <h2>Що ти дізнався в цьому модулі</h2>
+    <div class="takeaways">
+      <ul class="tkl">
+        <li>Промпт — це технічне завдання. Його якість визначає якість результату на 80%.</li>
+        <li>Ідеальний промпт має 4 елементи: Роль + Задача + Контекст + Формат (RACT).</li>
+        <li>Базові техніки: Role Prompting, контекстна бомба, контроль формату, негативні обмеження, покроковий запит.</li>
+        <li>Просунуті техніки: Chain of Thought, Few-Shot, Persona, Devil's Advocate, Multi-Perspective, Recursive Refinement.</li>
+        <li>7 головних помилок: розмитість, перевантаженість, відсутність аудиторії, прийняття першої відповіді, відсутність прикладів, відсутність довжини.</li>
+        <li>Ітерація — головний секрет. Перша відповідь = чернетка. Справжня якість — після 2–3 уточнень.</li>
+        <li>Готові шаблони можна адаптувати для будь-якої задачі, замінюючи [змінні].</li>
+      </ul>
+    </div>
+
+    <div class="task-block">
+      <div class="task-badge">⚡ Практичне завдання</div>
+      <h3 style="font-family:'Unbounded';font-size:18px;font-weight:700;color:var(--heading);margin-bottom:8px">Прокачай промпт за 30 хвилин</h3>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:0">Одразу практика — результат відчуєш сьогодні ж.</p>
+      <ul class="task-steps">
+        <li><span class="n">01</span>Візьми будь-яку задачу яку ти вже робив з ChatGPT або Claude. Знайди свій старий промпт.</li>
+        <li><span class="n">02</span>Перепиши його за фреймворком RACT: додай роль, уточни задачу, додай контекст, вкажи формат.</li>
+        <li><span class="n">03</span>Запусти обидва промпти і порівняй відповіді. Збережи скріншот різниці.</li>
+        <li><span class="n">04</span>До найкращої відповіді додай: "Покращ це. Зроби більш конкретним і скороти на 20%". Запусти ще раз.</li>
+        <li><span class="n">05</span>Збережи фінальний промпт у нотатках як шаблон. Це твоя перша особиста бібліотека промптів.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="module-nav">
+    <a href="#" class="btn btn-ghost">← Модуль 2: Інструменти</a>
+    <a href="#" class="btn btn-primary">Модуль 4: Автоматизація →</a>
+  </div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.template-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ttab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function copyText(btn) {
+  const body = btn.closest('.tpl-card').querySelector('.tpl-body');
+  const text = body.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Скопійовано ✓';
+    btn.style.color = 'var(--green)';
+    btn.style.borderColor = 'var(--green)';
+    setTimeout(() => {
+      btn.textContent = 'Копіювати';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>

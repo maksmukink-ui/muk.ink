@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Модуль 2 — AI Інструменти | AI Скрізь</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0c10;
+    --surface: #13151c;
+    --surface2: #1c1f2b;
+    --border: rgba(255,255,255,0.07);
+    --accent: #5b6af0;
+    --accent2: #a78bfa;
+    --accent3: #34d399;
+    --accent4: #f59e0b;
+    --text: #e8eaf6;
+    --muted: #7b80a0;
+    --heading: #ffffff;
+    --tag-bg: rgba(91,106,240,0.15);
+    --tag-color: #a5b4fc;
+
+    --cat-llm: #5b6af0;
+    --cat-llm-bg: rgba(91,106,240,0.12);
+    --cat-img: #ec4899;
+    --cat-img-bg: rgba(236,72,153,0.12);
+    --cat-video: #f59e0b;
+    --cat-video-bg: rgba(245,158,11,0.12);
+    --cat-voice: #34d399;
+    --cat-voice-bg: rgba(52,211,153,0.12);
+    --cat-auto: #818cf8;
+    --cat-auto-bg: rgba(129,140,248,0.12);
+    --cat-agent: #fb923c;
+    --cat-agent-bg: rgba(251,146,60,0.12);
+    --cat-spec: #22d3ee;
+    --cat-spec-bg: rgba(34,211,238,0.12);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Golos Text', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0; opacity:.4;
+  }
+  .wrap { max-width:860px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+
+  /* NAV */
+  .course-nav {
+    border-bottom:1px solid var(--border);
+    padding:18px 0;
+    position:sticky; top:0; z-index:100;
+    background:rgba(11,12,16,0.92);
+    backdrop-filter:blur(12px);
+  }
+  .course-nav .wrap { display:flex; align-items:center; justify-content:space-between; }
+  .course-logo { font-family:'Unbounded',sans-serif; font-size:13px; font-weight:700; color:var(--heading); letter-spacing:.05em; }
+  .course-logo span { color:var(--accent); }
+  .module-badge { font-size:12px; font-weight:600; color:var(--tag-color); background:var(--tag-bg); padding:4px 12px; border-radius:20px; }
+
+  /* TOC */
+  .toc {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:24px 28px;
+    margin:40px 0 0;
+  }
+  .toc-title { font-size:13px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:14px; }
+  .toc-list { list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .toc-list li a {
+    display:flex; align-items:center; gap:10px;
+    font-size:14px; color:var(--text);
+    text-decoration:none; padding:6px 0;
+    border-bottom:1px solid var(--border);
+    transition:color .15s;
+  }
+  .toc-list li:last-child a { border-bottom:none; }
+  .toc-list li a:hover { color:var(--accent2); }
+  .toc-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+  /* HERO */
+  .hero { padding:72px 0 56px; border-bottom:1px solid var(--border); }
+  .hero-tag { display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--accent3); margin-bottom:24px; }
+  .hero-tag::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--accent3); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.5)} }
+  .hero h1 { font-family:'Unbounded',sans-serif; font-size:clamp(28px,4.5vw,48px); font-weight:900; color:var(--heading); line-height:1.1; margin-bottom:22px; letter-spacing:-.02em; }
+  .hero h1 em { font-style:normal; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .hero-lead { font-size:18px; color:var(--muted); max-width:640px; line-height:1.6; margin-bottom:32px; }
+  .hero-meta { display:flex; gap:20px; flex-wrap:wrap; }
+  .meta-item { display:flex; align-items:center; gap:8px; font-size:14px; color:var(--muted); }
+
+  /* SECTION */
+  section { padding:64px 0; border-bottom:1px solid var(--border); }
+  section:last-of-type { border-bottom:none; }
+  .section-eyebrow { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; }
+  h2 { font-family:'Unbounded',sans-serif; font-size:clamp(20px,3vw,28px); font-weight:700; color:var(--heading); line-height:1.2; margin-bottom:16px; letter-spacing:-.02em; }
+  p { margin-bottom:14px; color:var(--text); }
+  p:last-child { margin-bottom:0; }
+  strong { color:var(--heading); font-weight:600; }
+
+  /* CATEGORY HEADER */
+  .cat-header {
+    display:flex; align-items:center; gap:14px;
+    padding:20px 24px;
+    border-radius:14px 14px 0 0;
+    border:1px solid var(--border);
+    border-bottom:none;
+    margin-top:40px;
+  }
+  .cat-icon { font-size:24px; }
+  .cat-info {}
+  .cat-name { font-family:'Unbounded',sans-serif; font-size:16px; font-weight:700; color:var(--heading); }
+  .cat-desc { font-size:13px; color:var(--muted); margin-top:2px; }
+
+  /* TOOL CARDS */
+  .tools-grid {
+    border:1px solid var(--border);
+    border-top:none;
+    border-radius:0 0 14px 14px;
+    overflow:hidden;
+  }
+  .tool-card {
+    display:grid;
+    grid-template-columns:200px 1fr;
+    border-bottom:1px solid var(--border);
+    transition:background .15s;
+  }
+  .tool-card:last-child { border-bottom:none; }
+  .tool-card:hover { background:rgba(255,255,255,.02); }
+
+  .tool-left {
+    padding:20px 20px;
+    border-right:1px solid var(--border);
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .tool-name { font-family:'Unbounded',sans-serif; font-size:14px; font-weight:700; color:var(--heading); line-height:1.2; }
+  .tool-maker { font-size:12px; color:var(--muted); }
+  .tool-price {
+    display:inline-block; font-size:11px; font-weight:600;
+    padding:3px 9px; border-radius:6px; margin-top:4px;
+    white-space:nowrap;
+  }
+  .price-free { background:rgba(52,211,153,.15); color:#34d399; }
+  .price-freemium { background:rgba(245,158,11,.15); color:#f59e0b; }
+  .price-paid { background:rgba(236,72,153,.15); color:#ec4899; }
+
+  .tool-right { padding:20px 24px; display:flex; flex-direction:column; gap:10px; }
+  .tool-desc { font-size:14px; color:var(--text); line-height:1.55; }
+
+  .pros-cons { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .pro-list, .con-list { display:flex; flex-direction:column; gap:4px; }
+  .pro-item, .con-item { font-size:12px; line-height:1.45; display:flex; gap:6px; align-items:flex-start; }
+  .pro-item::before { content:'✓'; color:var(--accent3); font-weight:700; flex-shrink:0; }
+  .con-item::before { content:'✗'; color:#f87171; font-weight:700; flex-shrink:0; }
+
+  .best-for {
+    font-size:12px;
+    background:var(--surface2);
+    border-radius:6px;
+    padding:8px 12px;
+    color:var(--muted);
+  }
+  .best-for strong { color:var(--accent2); font-size:11px; text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:2px; }
+
+  /* DECISION MATRIX */
+  .matrix {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:32px;
+  }
+  .matrix-header {
+    padding:16px 24px;
+    background:var(--surface2);
+    border-bottom:1px solid var(--border);
+    font-size:13px; font-weight:600; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.08em;
+  }
+  .matrix-row {
+    display:grid;
+    grid-template-columns:1fr 2fr 120px;
+    border-bottom:1px solid var(--border);
+    align-items:center;
+  }
+  .matrix-row:last-child { border-bottom:none; }
+  .matrix-row.header-row {
+    background:var(--surface2);
+    font-size:12px; font-weight:600; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+  .matrix-cell { padding:12px 20px; font-size:14px; }
+  .matrix-cell.task { color:var(--text); font-weight:500; }
+  .matrix-cell.tool { color:var(--accent2); }
+  .matrix-cell.note { font-size:12px; color:var(--muted); }
+
+  /* LOGIC FLOW */
+  .logic-steps {
+    display:flex; flex-direction:column; gap:0;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:24px;
+  }
+  .logic-step {
+    display:grid; grid-template-columns:56px 1fr;
+    border-bottom:1px solid var(--border);
+  }
+  .logic-step:last-child { border-bottom:none; }
+  .logic-num {
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Unbounded',sans-serif; font-size:13px; font-weight:700;
+    color:var(--accent); border-right:1px solid var(--border);
+    padding:16px 0;
+  }
+  .logic-content { padding:16px 20px; }
+  .logic-content strong { display:block; color:var(--heading); font-size:14px; margin-bottom:4px; }
+  .logic-content span { font-size:13px; color:var(--muted); }
+
+  /* PRICE COMPARE */
+  .price-table {
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:24px;
+  }
+  .price-row {
+    display:grid;
+    grid-template-columns:160px 1fr 100px 120px;
+    border-bottom:1px solid var(--border);
+    align-items:center;
+  }
+  .price-row:last-child { border-bottom:none; }
+  .price-row.head {
+    background:var(--surface2);
+    font-size:11px; font-weight:700;
+    color:var(--muted); text-transform:uppercase; letter-spacing:.06em;
+  }
+  .price-cell { padding:12px 16px; font-size:13px; }
+  .price-cell.name { font-weight:600; color:var(--heading); }
+  .price-cell.free-yes { color:var(--accent3); font-weight:600; }
+  .price-cell.free-no { color:#f87171; }
+  .price-cell.start { color:var(--accent4); font-weight:600; }
+
+  /* TAKEAWAYS */
+  .takeaways { background:linear-gradient(135deg,rgba(91,106,240,.1),rgba(167,139,250,.07)); border:1px solid rgba(91,106,240,.2); border-radius:14px; padding:32px; margin-top:28px; }
+  .takeaway-list { list-style:none; display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+  .takeaway-list li { display:flex; align-items:flex-start; gap:12px; font-size:14px; line-height:1.55; }
+  .takeaway-list li::before { content:'✓'; color:var(--accent3); font-weight:700; font-size:15px; flex-shrink:0; margin-top:1px; }
+
+  /* TASK */
+  .task-block { background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:32px; margin-top:28px; }
+  .task-badge { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#fbbf24; background:rgba(251,191,36,.12); padding:4px 12px; border-radius:20px; margin-bottom:14px; }
+  .task-steps { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:14px; }
+  .task-steps li { display:flex; align-items:flex-start; gap:12px; font-size:14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:12px 14px; line-height:1.5; }
+  .task-steps li .num { font-family:'Unbounded',sans-serif; font-size:11px; font-weight:700; color:var(--accent); flex-shrink:0; margin-top:1px; }
+
+  /* MODULE NAV */
+  .module-nav { display:flex; justify-content:space-between; align-items:center; padding:48px 0 80px; gap:16px; }
+  .btn { display:inline-flex; align-items:center; gap:8px; font-family:'Unbounded',sans-serif; font-size:12px; font-weight:700; padding:14px 22px; border-radius:10px; text-decoration:none; letter-spacing:.02em; transition:all .2s; cursor:pointer; border:none; }
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-primary:hover { background:#4a57d4; }
+  .btn-ghost { background:transparent; color:var(--muted); border:1px solid var(--border); }
+  .btn-ghost:hover { color:var(--text); }
+
+  /* HIGHLIGHT */
+  .callout { background:var(--surface); border-left:3px solid var(--accent3); border-radius:0 12px 12px 0; padding:20px 24px; margin:24px 0; font-size:16px; color:var(--text); line-height:1.6; }
+
+  @media(max-width:640px) {
+    .tool-card { grid-template-columns:1fr; }
+    .tool-left { border-right:none; border-bottom:1px solid var(--border); }
+    .pros-cons { grid-template-columns:1fr; }
+    .matrix-row, .price-row { grid-template-columns:1fr 1fr; }
+    .matrix-cell.note, .price-cell:nth-child(3) { display:none; }
+    .module-nav { flex-direction:column; }
+    .btn { width:100%; justify-content:center; }
+    .toc { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="course-nav">
+  <div class="wrap">
+    <div class="course-logo">AI <span>Скрізь</span></div>
+    <div class="module-badge">Модуль 2 з 7</div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-tag">Модуль 2 — Огляд інструментів</div>
+    <h1>Всі AI-інструменти<br><em>по категоріях</em></h1>
+    <p class="hero-lead">
+      Понад 50 AI-інструментів — структуровано, чесно, з цінами. Без хайпу: 
+      що реально корисне, що переоцінене, і яку логіку використовувати при виборі.
+    </p>
+    <div class="hero-meta">
+      <div class="meta-item">⏱ ~35 хвилин</div>
+      <div class="meta-item">📊 7 категорій</div>
+      <div class="meta-item">💡 Таблиця вибору в кінці</div>
+    </div>
+
+    <div class="toc">
+      <div class="toc-title">Зміст модуля</div>
+      <ul class="toc-list">
+        <li><a href="#llm"><span class="toc-dot" style="background:var(--cat-llm)"></span>1 — LLM: текстові моделі (Claude, GPT, Gemini...)</a></li>
+        <li><a href="#image"><span class="toc-dot" style="background:var(--cat-img)"></span>2 — Зображення (Midjourney, Flux, DALL-E...)</a></li>
+        <li><a href="#video"><span class="toc-dot" style="background:var(--cat-video)"></span>3 — Відео (Kling, Runway, Veo, HeyGen...)</a></li>
+        <li><a href="#voice"><span class="toc-dot" style="background:var(--cat-voice)"></span>4 — Голос (ElevenLabs, Suno, Whisper...)</a></li>
+        <li><a href="#automation"><span class="toc-dot" style="background:var(--cat-auto)"></span>5 — Автоматизація (Make, Zapier, n8n...)</a></li>
+        <li><a href="#agents"><span class="toc-dot" style="background:var(--cat-agent)"></span>6 — AI-агенти (Cursor, Manus, Perplexity...)</a></li>
+        <li><a href="#specialized"><span class="toc-dot" style="background:var(--cat-spec)"></span>7 — Спеціалізовані (маркетинг, медицина, право...)</a></li>
+        <li><a href="#logic"><span class="toc-dot" style="background:#fff;opacity:.3"></span>Логіка вибору і цінова карта</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== LLM ======================== -->
+<section id="llm">
+  <div class="wrap">
+    <div class="section-eyebrow">Категорія 1</div>
+    <h2>LLM — текстові моделі</h2>
+    <p>Це основа всього. LLM (Large Language Model) — моделі, які розуміють і генерують текст. З них починається 90% AI-роботи: написання, аналіз, код, переклад, резюмування.</p>
+
+    <div class="callout">
+      Всі великі LLM вміють одне і те ж — різниця в <strong>якості мислення, стилі відповідей, ціні та обмеженнях</strong>. Обирай модель під задачу, а не за брендом.
+    </div>
+
+    <div class="cat-header" style="background:var(--cat-llm-bg); border-color:rgba(91,106,240,.25);">
+      <span class="cat-icon">🧠</span>
+      <div class="cat-info">
+        <div class="cat-name">Великі мовні моделі (LLM)</div>
+        <div class="cat-desc">Текст, код, аналіз, резюмування, переклад, діалог</div>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Claude</div>
+          <div class="tool-maker">Anthropic</div>
+          <span class="tool-price price-freemium">Freemium · від $20/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Найкраща модель для довгих текстів, нюансованого аналізу і завдань, де важлива точність. Контекстне вікно — до 200 000 токенів (це як прочитати роман за раз). Відповідає чесно, не підлещується.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Найкращий для аналізу і письма</div>
+              <div class="pro-item">Безпечний і точний у фактах</div>
+              <div class="pro-item">Величезне контекстне вікно</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Немає генерації зображень</div>
+              <div class="con-item">Без пошуку в реальному часі (в базовій)</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Довгі документи, юридичні тексти, глибокий аналіз, написання складного контенту, кодування</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">ChatGPT</div>
+          <div class="tool-maker">OpenAI · GPT-4o / GPT-5</div>
+          <span class="tool-price price-freemium">Freemium · від $20/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Найвідоміша модель. GPT-4o вміє все одразу: текст, зображення, голос, пошук у вебі. Найбільша екосистема плагінів і інтеграцій. GPT-5 — найсвіжіша флагманська модель з сильним reasoning.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Вбудований пошук у вебі</div>
+              <div class="pro-item">Генерація зображень (DALL-E)</div>
+              <div class="pro-item">Тисячі GPT і плагінів</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Може "підлещуватися" у відповідях</div>
+              <div class="con-item">Pro план дорогий ($200/міс)</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Щоденні завдання, пошук інфо, генерація зображень, написання постів, універсальна допомога</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Gemini</div>
+          <div class="tool-maker">Google · 2.5 Pro/Flash</div>
+          <span class="tool-price price-freemium">Freemium · від $20/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Сильна інтеграція з Google-екосистемою (Gmail, Docs, Drive). Gemini 2.5 Pro — топ по coding benchmark'ах. Flash — найшвидша і дешева версія для API.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Вбудовано в Google Workspace</div>
+              <div class="pro-item">Кращий для коду (2.5 Pro)</div>
+              <div class="pro-item">Flash — дуже швидкий і дешевий</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Якість письма поступається Claude</div>
+              <div class="con-item">Менш точний у фактах</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Робота з Google Docs/Gmail, кодування, дешеві API-інтеграції, мультимодальні задачі</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Grok</div>
+          <div class="tool-maker">xAI (Elon Musk)</div>
+          <span class="tool-price price-freemium">Freemium · в X Premium</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Модель з доступом до X (Twitter) у реальному часі. Корисна для відстеження трендів, новин та соцмедіа-аналізу. Менш цензурована, але й менш точна.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Реальний час з X/Twitter</div>
+              <div class="pro-item">Трендові теми і новини</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Менш точний у фактах</div>
+              <div class="con-item">Слабший для серйозних задач</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Соцмедіа-тренди, моніторинг новин, неформальне спілкування</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">DeepSeek</div>
+          <div class="tool-maker">DeepSeek AI (Китай)</div>
+          <span class="tool-price price-free">Безкоштовний</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Відкрита модель, яка шокувала ринок у 2025 — майже рівня GPT-4 при майже нульовій ціні. Сильний у логіці і коді. Є питання щодо конфіденційності (китайський сервер).</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Повністю безкоштовний</div>
+              <div class="pro-item">Відмінний для коду і логіки</div>
+              <div class="pro-item">Open source — можна запустити локально</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Дані можуть зберігатись на китайських серверах</div>
+              <div class="con-item">Цензурований для деяких тем</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Кодування, математика, задачі де важлива ціна, локальне розгортання</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Perplexity</div>
+          <div class="tool-maker">Perplexity AI</div>
+          <span class="tool-price price-freemium">Freemium · $20/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Не просто LLM — це AI-пошуковик. Відповідає на питання з посиланнями на джерела. Ідеальний, коли потрібна актуальна інформація, а не просто генерація тексту.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Завжди актуальна інформація</div>
+              <div class="pro-item">Цитати і джерела</div>
+              <div class="pro-item">Швидко для ресерчу</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Слабший для творчих задач</div>
+              <div class="con-item">Не замінює глибокий аналіз</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Дослідження, факт-чекінг, актуальні новини, ресерч перед статтею</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================== IMAGE ======================== -->
+<section id="image">
+  <div class="wrap">
+    <div class="section-eyebrow">Категорія 2</div>
+    <h2>Генерація зображень</h2>
+    <p>AI малює краще більшості людей. Але різні інструменти заточені під різні задачі: художній стиль, фотореалізм, логотипи, маркетингові банери.</p>
+
+    <div class="cat-header" style="background:var(--cat-img-bg); border-color:rgba(236,72,153,.25);">
+      <span class="cat-icon">🎨</span>
+      <div class="cat-info">
+        <div class="cat-name">Генерація зображень</div>
+        <div class="cat-desc">Ілюстрації, фото, арт, маркетингові візуали, лого</div>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Midjourney</div>
+          <div class="tool-maker">Midjourney v8</div>
+          <span class="tool-price price-paid">від $10/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Еталон художньої якості. Генерує зображення галерейного рівня — кінематографічні портрети, концепт-арт, ілюстрації. v8 (2026) — 2K нативна роздільна здатність.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Найкраща художня якість</div>
+              <div class="pro-item">Релакс-режим = необмежено</div>
+              <div class="pro-item">Найбільша спільнота</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Немає безкоштовного плану</div>
+              <div class="con-item">Немає офіційного API</div>
+              <div class="con-item">Слабкий рендер тексту</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Концепт-арт, ілюстрації для статей, соцмедіа-контент, брендові зображення</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Flux 2 Pro</div>
+          <div class="tool-maker">Black Forest Labs</div>
+          <span class="tool-price price-freemium">від $0.05/зображення</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Лідер фотореалізму. Якщо потрібно зображення, неодмінне від реального фото — це Flux. Ідеальний для продуктової фотографії і реалістичних мокапів. Є API.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Найкращий фотореалізм</div>
+              <div class="pro-item">Офіційний API</div>
+              <div class="pro-item">Self-hosted варіант</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Менш "художній" за Midjourney</div>
+              <div class="con-item">Повільніший</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Продуктові фото, реалістичні мокапи, заміна стокових фото, API-інтеграції</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">DALL-E 3 / GPT Image</div>
+          <div class="tool-maker">OpenAI</div>
+          <span class="tool-price price-freemium">В ChatGPT Plus</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Найкраще слідує складним промптам з кількома елементами. Розуміє просторові відносини ("червона куля на синій коробці"). Рендерить текст краще за більшість конкурентів.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Точне слідування промпту</div>
+              <div class="pro-item">Хороший рендер тексту</div>
+              <div class="pro-item">Легкий API-доступ</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Менш художній</div>
+              <div class="con-item">Буває пересичення кольорів</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Банери з текстом, маркетингові матеріали, інфографіки, API-проекти</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Ideogram v3</div>
+          <div class="tool-maker">Ideogram AI</div>
+          <span class="tool-price price-freemium">Безкоштовно · від $20/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Вирішив проблему тексту в зображеннях. Логотипи, знаки, написи — рендеруються чітко і правильно. Єдина модель, якій можна довіряти текст у картинці.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Кращий текст у зображеннях</div>
+              <div class="pro-item">Є безкоштовний план</div>
+              <div class="pro-item">Ідеальний для типографіки</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Менш versatile для арту</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Логотипи, постери, банери з написами, упаковка, брендинг</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Adobe Firefly</div>
+          <div class="tool-maker">Adobe</div>
+          <span class="tool-price price-paid">В Creative Cloud</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Єдина модель, навчена тільки на ліцензованих зображеннях. Якщо важлива комерційна безпека — Firefly гарантує відсутність претензій з авторського права.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">100% комерційно безпечна</div>
+              <div class="pro-item">Вбудована в Photoshop/Illustrator</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Потрібна підписка Adobe</div>
+              <div class="con-item">Якість поступається Midjourney</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Корпоративні клієнти, реклама де важливо авторське право</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================== VIDEO ======================== -->
+<section id="video">
+  <div class="wrap">
+    <div class="section-eyebrow">Категорія 3</div>
+    <h2>Генерація відео</h2>
+    <p>У 2025 ціна AI-відео впала з $50–200 за хвилину до $0.50–30. Тепер це реальний інструмент для контент-мейкерів і бізнесу.</p>
+
+    <div class="cat-header" style="background:var(--cat-video-bg); border-color:rgba(245,158,11,.25);">
+      <span class="cat-icon">🎬</span>
+      <div class="cat-info">
+        <div class="cat-name">AI Відео</div>
+        <div class="cat-desc">Текст-у-відео, аватари, навчальні відео, реклама</div>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Kling AI 3.0</div>
+          <div class="tool-maker">Kuaishou</div>
+          <span class="tool-price price-freemium">Безкоштовно · від $10/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Найкращий баланс якості, ціни і доступності. Генерує відео до 2 хвилин (найдовше на ринку), відмінний ліп-синк. Щоденні безкоштовні кредити.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Відео до 2 хвилин</div>
+              <div class="pro-item">Щоденні безкоштовні кредити</div>
+              <div class="pro-item">Кращий реалізм людей</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Може бути повільним на безкоштовному плані</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Соцмедіа, рекламні ролики, контент з людьми, тестування ідей</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Runway Gen-4.5</div>
+          <div class="tool-maker">Runway</div>
+          <span class="tool-price price-freemium">125 кредитів free · від $12/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Найбільш зрілий інструмент для відеовиробництва. 4K, розширені камерні контролі, мульти-шот генерація. Вибір кінематографістів і студій.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Найбільший контроль над камерою</div>
+              <div class="pro-item">4K роздільна здатність</div>
+              <div class="pro-item">Зрілий інструмент для продакшну</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Максимум 16 секунд кліп</div>
+              <div class="con-item">Free tier — лише одноразово</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Комерційна реклама, кіновиробництво, клієнтська робота</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Veo 3.1</div>
+          <div class="tool-maker">Google DeepMind</div>
+          <span class="tool-price price-paid">Vertex AI pricing</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Технічно найсильніша модель — генерує відео з нативним звуком (єдина поряд з Kling 2.6). Доступна через Google Cloud. Veo 3.1 Lite — доступніша версія.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Нативна генерація звуку</div>
+              <div class="pro-item">Максимальна реалістичність</div>
+              <div class="pro-item">60-секундні кліпи</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Дорогий ($249+/міс)</div>
+              <div class="con-item">Потрібен Google Cloud</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Enterprise-продакшн, відео з синхронним звуком, висока якість для клієнтів</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">HeyGen / Synthesia</div>
+          <div class="tool-maker">HeyGen / Synthesia</div>
+          <span class="tool-price price-paid">від $29/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Не генерація з нуля, а AI-аватари — цифрова людина читає твій текст на відео. Ідеально для навчальних курсів, корпоративних відео, пояснень. Без актора і камери.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Реалістичний аватар-диктор</div>
+              <div class="pro-item">Багатомовний ліп-синк</div>
+              <div class="pro-item">Швидко і масштабовано</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Видно, що AI (іноді)</div>
+              <div class="con-item">Ціна зростає зі збільшенням хвилин</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Навчальні відео, корпоративні презентації, онлайн-курси, мультимовний контент</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Pika 2.5</div>
+          <div class="tool-maker">Pika Labs</div>
+          <span class="tool-price price-freemium">Безкоштовно · від $8/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Найпростіший у використанні для початківців. Pikaffects — унікальні ефекти (вибухи, трансформації) з одного кліку. Ідеально для соцмедіа і творчих проектів.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Найпростіший інтерфейс</div>
+              <div class="pro-item">Унікальні творчі ефекти</div>
+              <div class="pro-item">Доступна ціна</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Максимум 10 секунд</div>
+              <div class="con-item">Менш реалістичний</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>TikTok/Reels, творчі кліпи, початківці в AI-відео</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================== VOICE ======================== -->
+<section id="voice">
+  <div class="wrap">
+    <div class="section-eyebrow">Категорія 4</div>
+    <h2>Голосові інструменти</h2>
+    <p>Клон голосу, озвучення, транскрипція, AI-музика — категорія, яка зростає найшвидше.</p>
+
+    <div class="cat-header" style="background:var(--cat-voice-bg); border-color:rgba(52,211,153,.25);">
+      <span class="cat-icon">🎙️</span>
+      <div class="cat-info">
+        <div class="cat-name">Голос і аудіо</div>
+        <div class="cat-desc">TTS, клон голосу, транскрипція, AI-музика</div>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">ElevenLabs</div>
+          <div class="tool-maker">ElevenLabs</div>
+          <span class="tool-price price-freemium">Безкоштовно · від $5/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Золотий стандарт озвучення. Клон голосу з 1 хвилини запису. Найреалістичніший синтез мови, підтримка 30+ мов. API для інтеграції.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Найреалістичніший голос</div>
+              <div class="pro-item">Клон за 1 хвилину аудіо</div>
+              <div class="pro-item">30+ мов включно з українською</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">На безкоштовному — ліміт символів</div>
+              <div class="con-item">Клон голосу — платно</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Озвучення подкастів, курсів, відео, клон власного голосу для масштабування</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Whisper / Otter.ai</div>
+          <div class="tool-maker">OpenAI / Otter</div>
+          <span class="tool-price price-freemium">Whisper безкоштовний</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Whisper — відкрита модель транскрипції від OpenAI. Otter.ai — зручний інтерфейс поверх нього + автоматичні нотатки зустрічей. Перетворює аудіо на текст з точністю до 95%+.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Висока точність транскрипції</div>
+              <div class="pro-item">Whisper — безкоштовний і open source</div>
+              <div class="pro-item">Otter — автоматичні нотатки зустрічей</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Otter платний для командних функцій</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Транскрипція інтерв'ю, нотатки зустрічей, субтитри для відео</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Suno / Udio</div>
+          <div class="tool-maker">Suno AI / Udio</div>
+          <span class="tool-price price-freemium">Безкоштовно · від $8/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Генерація повноцінних пісень з тексту. Ти пишеш промпт — отримуєш пісню з вокалом, інструментами, мікшуванням. Революція для контенту і маркетингу.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Повна пісня з промпту</div>
+              <div class="pro-item">Будь-який жанр</div>
+              <div class="pro-item">Безкоштовний старт</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Обмежений контроль над деталями</div>
+              <div class="con-item">Питання авторських прав</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Джингли, фонова музика, контент для відео, швидкі демо-треки</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================== AUTOMATION ======================== -->
+<section id="automation">
+  <div class="wrap">
+    <div class="section-eyebrow">Категорія 5</div>
+    <h2>Автоматизація</h2>
+    <p>Підключаєш додатки між собою і додаєш AI — отримуєш роботів, які замість тебе переміщають дані, відповідають на повідомлення, публікують контент.</p>
+
+    <div class="cat-header" style="background:var(--cat-auto-bg); border-color:rgba(129,140,248,.25);">
+      <span class="cat-icon">⚡</span>
+      <div class="cat-info">
+        <div class="cat-name">Автоматизація і no-code</div>
+        <div class="cat-desc">З'єднання додатків, автоматичні workflow, AI-дії</div>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Make</div>
+          <div class="tool-maker">Make (ex Integromat)</div>
+          <span class="tool-price price-freemium">Безкоштовно · від $9/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Візуальний конструктор автоматизацій. Drag-and-drop сценарії між тисячами додатків. 10 000 операцій за $9/міс — у 13 разів вигідніше Zapier. Найкращий баланс ціна/можливості.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Найкраща ціна на ринку</div>
+              <div class="pro-item">Зручний візуальний редактор</div>
+              <div class="pro-item">Тисячі інтеграцій</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Складніший за Zapier для новачків</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Бізнес-автоматизація, контент-пайплайни, CRM-інтеграції</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Zapier</div>
+          <div class="tool-maker">Zapier</div>
+          <span class="tool-price price-freemium">Безкоштовно · від $20/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Найвідоміший і найпростіший. 6000+ інтеграцій. Безкоштовний план для базових сценаріїв. Ідеальний старт для тих хто ніколи не автоматизував. Дорожчає при масштабуванні.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Найпростіший для початківців</div>
+              <div class="pro-item">6000+ інтеграцій</div>
+              <div class="pro-item">Величезна документація</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Дорогий при великих обсягах</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Перший досвід автоматизації, прості одно-крокові сценарії</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">n8n</div>
+          <div class="tool-maker">n8n GmbH</div>
+          <span class="tool-price price-freemium">Open source · від $24/міс cloud</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Open source альтернатива Zapier/Make. Можна розгорнути на власному сервері — дані не покидають твою інфраструктуру. Ідеальний для технічних команд і складних AI-workflows.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Self-hosted — повна конфіденційність</div>
+              <div class="pro-item">Необмежено при self-host</div>
+              <div class="pro-item">Найкращий для AI-агентів</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Потрібні технічні знання</div>
+              <div class="con-item">Більш складний у налаштуванні</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Технічні команди, складні AI-пайплайни, де важлива конфіденційність</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================== AGENTS ======================== -->
+<section id="agents">
+  <div class="wrap">
+    <div class="section-eyebrow">Категорія 6</div>
+    <h2>AI-агенти</h2>
+    <p>Агент — це AI, який не просто відповідає, а діє: відкриває браузер, пише код, робить пошук, виконує задачі самостійно.</p>
+
+    <div class="cat-header" style="background:var(--cat-agent-bg); border-color:rgba(251,146,60,.25);">
+      <span class="cat-icon">🤖</span>
+      <div class="cat-info">
+        <div class="cat-name">AI-агенти і кодування</div>
+        <div class="cat-desc">Автономні агенти, coding assistants, дослідники</div>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Cursor</div>
+          <div class="tool-maker">Cursor AI</div>
+          <span class="tool-price price-freemium">Безкоштовно · від $20/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">IDE з вбудованим AI. Пишеш в редакторі, AI пропонує код, виправляє помилки, рефакторить. Найкращий інструмент для розробників. Замінює GitHub Copilot для більшості задач.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Розуміє весь проект цілком</div>
+              <div class="pro-item">Автоматичне виправлення помилок</div>
+              <div class="pro-item">Підтримка всіх мов</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Для розробників, не для всіх</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Розробка ПЗ, написання скриптів, автоматизація через код</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Claude Projects</div>
+          <div class="tool-maker">Anthropic</div>
+          <span class="tool-price price-freemium">В Claude Pro $20/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Налаштований Claude з пам'яттю, документами і інструкціями. Завантажуєш свої файли, задаєш контекст — і маєш персонального асистента, який знає твій бізнес.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Пам'ятає контекст між сесіями</div>
+              <div class="pro-item">Завантаження документів</div>
+              <div class="pro-item">Кастомні інструкції</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Потрібен платний план</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Персональний бізнес-асистент, аналіз документів, постійні робочі проекти</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Manus</div>
+          <div class="tool-maker">Manus AI</div>
+          <span class="tool-price price-paid">Invite-only / платний</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Повністю автономний агент. Ти даєш задачу ("зроби ресерч конкурентів і склади таблицю") — він сам шукає, читає сайти, обробляє дані, повертає результат. Без участі людини.</div>
+          <div class="pros-cons">
+            <div class="pro-list">
+              <div class="pro-item">Повна автономність</div>
+              <div class="pro-item">Складні багатокрокові задачі</div>
+            </div>
+            <div class="con-list">
+              <div class="con-item">Обмежений доступ</div>
+              <div class="con-item">Може помилятися в складних задачах</div>
+            </div>
+          </div>
+          <div class="best-for"><strong>Краще за все</strong>Ресерч, збір даних, аналіз конкурентів, автоматизація складних задач</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================== SPECIALIZED ======================== -->
+<section id="specialized">
+  <div class="wrap">
+    <div class="section-eyebrow">Категорія 7</div>
+    <h2>Спеціалізовані AI</h2>
+    <p>Інструменти для конкретних індустрій — маркетинг, медицина, юриспруденція, дизайн, освіта.</p>
+
+    <div class="cat-header" style="background:var(--cat-spec-bg); border-color:rgba(34,211,238,.25);">
+      <span class="cat-icon">🎯</span>
+      <div class="cat-info">
+        <div class="cat-name">Вертикальні AI-інструменти</div>
+        <div class="cat-desc">Маркетинг, медицина, право, дизайн, освіта</div>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Jasper / Copy.ai</div>
+          <div class="tool-maker">Маркетинг</div>
+          <span class="tool-price price-paid">від $39/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">AI для маркетингового контенту. Готові шаблони для email-розсилок, рекламних текстів, постів, лендінгів. Навчений на конвертуючих текстах.</div>
+          <div class="best-for"><strong>Краще за все</strong>Email-маркетинг, рекламні тексти, масовий контент-маркетинг</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Canva AI</div>
+          <div class="tool-maker">Дизайн</div>
+          <span class="tool-price price-freemium">Безкоштовно · від $15/міс</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">Canva з AI-функціями: генерація зображень, Magic Write (текст), Dream Lab (арт). Ідеальний для не-дизайнерів. Шаблони + AI = професійний результат без навичок.</div>
+          <div class="best-for"><strong>Краще за все</strong>SMM, презентації, брендові матеріали без дизайнера</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Notion AI</div>
+          <div class="tool-maker">Продуктивність</div>
+          <span class="tool-price price-paid">+$8/міс до Notion</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">AI прямо в нотатках. Резюмує сторінки, заповнює бази даних, генерує контент. Ідеальний для команд, які вже у Notion.</div>
+          <div class="best-for"><strong>Краще за все</strong>Команди в Notion, управління проектами, база знань</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Harvey AI</div>
+          <div class="tool-maker">Юриспруденція</div>
+          <span class="tool-price price-paid">Enterprise pricing</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">AI для юристів. Аналіз договорів, судова практика, підготовка документів. Навчений на юридичних текстах. Використовується топ-100 юридичних фірм світу.</div>
+          <div class="best-for"><strong>Краще за все</strong>Юридичні фірми, корпоративні юридичні відділи</div>
+        </div>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-left">
+          <div class="tool-name">Abridge / Suki</div>
+          <div class="tool-maker">Медицина</div>
+          <span class="tool-price price-paid">Enterprise pricing</span>
+        </div>
+        <div class="tool-right">
+          <div class="tool-desc">AI для медиків. Abridge — транскрипція і структурування лікарських нотаток під час прийому. Suki — голосовий асистент для ЕМК. Економить лікарям 3+ години щодня.</div>
+          <div class="best-for"><strong>Краще за все</strong>Клініки, лікарні, медичні практики</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================== LOGIC ======================== -->
+<section id="logic">
+  <div class="wrap">
+    <div class="section-eyebrow">Як обирати</div>
+    <h2>Логіка вибору інструменту</h2>
+    <p>Правило просте: <strong>починай з безкоштовного, плати тільки коли відчуєш реальну цінність</strong>. Ось покрокова логіка:</p>
+
+    <div class="logic-steps">
+      <div class="logic-step">
+        <div class="logic-num">01</div>
+        <div class="logic-content">
+          <strong>Визнач задачу</strong>
+          <span>Текст → LLM. Зображення → Image. Відео → Video. Автоматизація → Make/Zapier. Не купуй "все-в-одному" без чіткого розуміння задачі.</span>
+        </div>
+      </div>
+      <div class="logic-step">
+        <div class="logic-num">02</div>
+        <div class="logic-content">
+          <strong>Почни з безкоштовного</strong>
+          <span>Claude, ChatGPT, Gemini — всі мають freemium. Kling, Pika, Suno — безкоштовні кредити. Протестуй перед оплатою.</span>
+        </div>
+      </div>
+      <div class="logic-step">
+        <div class="logic-num">03</div>
+        <div class="logic-content">
+          <strong>Одна підписка → одна LLM</strong>
+          <span>Не потрібно платити і за Claude, і за ChatGPT. Обери одну основну і використовуй безкоштовні версії інших для порівняння.</span>
+        </div>
+      </div>
+      <div class="logic-step">
+        <div class="logic-num">04</div>
+        <div class="logic-content">
+          <strong>Комбінуй через автоматизацію</strong>
+          <span>Make/Zapier + Claude + Midjourney = повний контент-пайплайн. Сила — в поєднанні, а не в окремих інструментах.</span>
+        </div>
+      </div>
+      <div class="logic-step">
+        <div class="logic-num">05</div>
+        <div class="logic-content">
+          <strong>Перевіряй щоквартально</strong>
+          <span>AI-ринок змінюється кожні 3 місяці. Підписка яку взяв рік тому — можливо вже не найкраща. Переглядай регулярно.</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;">
+      <h2>Матриця: яке завдання → який інструмент</h2>
+      <div class="matrix">
+        <div class="matrix-row header-row">
+          <div class="matrix-cell">Задача</div>
+          <div class="matrix-cell">Кращий інструмент</div>
+          <div class="matrix-cell">Альтернатива</div>
+        </div>
+        <div class="matrix-row"><div class="matrix-cell task">Написати статтю / пост</div><div class="matrix-cell tool">Claude</div><div class="matrix-cell note">ChatGPT</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Дослідити тему / факти</div><div class="matrix-cell tool">Perplexity</div><div class="matrix-cell note">ChatGPT з пошуком</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Намалювати ілюстрацію</div><div class="matrix-cell tool">Midjourney</div><div class="matrix-cell note">DALL-E 3</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Реалістичне фото</div><div class="matrix-cell tool">Flux 2 Pro</div><div class="matrix-cell note">Kling (image)</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Банер з текстом</div><div class="matrix-cell tool">Ideogram v3</div><div class="matrix-cell note">Canva AI</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Короткий рекламний кліп</div><div class="matrix-cell tool">Kling AI</div><div class="matrix-cell note">Pika</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Навчальне відео з аватаром</div><div class="matrix-cell tool">HeyGen</div><div class="matrix-cell note">Synthesia</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Озвучення контенту</div><div class="matrix-cell tool">ElevenLabs</div><div class="matrix-cell note">Google TTS</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Транскрипція аудіо</div><div class="matrix-cell tool">Whisper</div><div class="matrix-cell note">Otter.ai</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">AI-музика / джингл</div><div class="matrix-cell tool">Suno</div><div class="matrix-cell note">Udio</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Автоматизація бізнес-процесів</div><div class="matrix-cell tool">Make</div><div class="matrix-cell note">Zapier</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">Написання коду</div><div class="matrix-cell tool">Cursor</div><div class="matrix-cell note">Claude / Gemini</div></div>
+        <div class="matrix-row"><div class="matrix-cell task">SMM-контент і дизайн</div><div class="matrix-cell tool">Canva AI</div><div class="matrix-cell note">ChatGPT + Midjourney</div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;">
+      <h2>Цінова карта: що безкоштовно, за що варто платити</h2>
+      <div class="price-table">
+        <div class="price-row head">
+          <div class="price-cell">Інструмент</div>
+          <div class="price-cell">Що є безкоштовно</div>
+          <div class="price-cell">Безкоштовно?</div>
+          <div class="price-cell">Старт платного</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Claude</div>
+          <div class="price-cell">Базова модель, ліміт повідомлень</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$20/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">ChatGPT</div>
+          <div class="price-cell">GPT-4o mini, ліміти</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$20/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Gemini</div>
+          <div class="price-cell">Gemini 2.0 Flash, ліміти</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$20/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">DeepSeek</div>
+          <div class="price-cell">Повна версія, без лімітів</div>
+          <div class="price-cell free-yes">✓ Повністю</div>
+          <div class="price-cell start">Безкоштовний</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Perplexity</div>
+          <div class="price-cell">Базовий пошук</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$20/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Midjourney</div>
+          <div class="price-cell">Немає</div>
+          <div class="price-cell free-no">✗ Ні</div>
+          <div class="price-cell start">$10/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Ideogram</div>
+          <div class="price-cell">10 кредитів/тиждень</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$20/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Kling AI</div>
+          <div class="price-cell">Щоденні кредити, 5 сек відео</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$10/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">ElevenLabs</div>
+          <div class="price-cell">10 000 символів/міс</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$5/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Suno</div>
+          <div class="price-cell">50 кредитів/день</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$8/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Make</div>
+          <div class="price-cell">1000 операцій/міс</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$9/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Zapier</div>
+          <div class="price-cell">5 Zaps, 100 завдань/міс</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$20/міс</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">n8n</div>
+          <div class="price-cell">Self-hosted — необмежено</div>
+          <div class="price-cell free-yes">✓ Open source</div>
+          <div class="price-cell start">$24/міс (cloud)</div>
+        </div>
+        <div class="price-row">
+          <div class="price-cell name">Canva AI</div>
+          <div class="price-cell">Обмежені AI-кредити</div>
+          <div class="price-cell free-yes">✓ Так</div>
+          <div class="price-cell start">$15/міс</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TAKEAWAYS -->
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow">Підсумок</div>
+    <h2>Що ти дізнався в цьому модулі</h2>
+    <div class="takeaways">
+      <ul class="takeaway-list">
+        <li>AI-інструменти діляться на 7 категорій: LLM, зображення, відео, голос, автоматизація, агенти, спеціалізовані.</li>
+        <li>Для тексту і аналізу — Claude. Для щоденних задач з пошуком — ChatGPT. Для коду — Gemini або Cursor.</li>
+        <li>Для зображень: Midjourney = арт, Flux = фото, Ideogram = текст у картинках.</li>
+        <li>Відео: Kling — найкращий баланс. HeyGen — аватари для бізнесу. Runway — професійний продакшн.</li>
+        <li>Make вигідніший за Zapier у 13 разів. n8n — якщо потрібна конфіденційність і self-hosting.</li>
+        <li>Більшість топ-інструментів мають безкоштовний план. Плати тільки коли відчуєш реальну цінність.</li>
+        <li>Сила — в комбінуванні: LLM + Image + Automation = повноцінний AI-пайплайн.</li>
+      </ul>
+    </div>
+
+    <div class="task-block" style="margin-top:28px;">
+      <div class="task-badge">⚡ Завдання</div>
+      <h3 style="font-family:'Unbounded';font-size:18px;font-weight:700;color:var(--heading);margin-bottom:10px;">Практика: зареєструйся і спробуй</h3>
+      <p style="color:var(--muted);font-size:14px;">Не просто прочитай — зареєструйся і зроби хоч один запит у кожному типі інструментів.</p>
+      <ul class="task-steps">
+        <li><span class="num">01</span>Зайди на claude.ai і ChatGPT. Постав їм одне і те ж питання — порівняй відповіді. Відчуй різницю стилів.</li>
+        <li><span class="num">02</span>Зайди на ideogram.ai (безкоштовно). Згенеруй зображення з написом — наприклад "AI Скрізь" в стилі постера.</li>
+        <li><span class="num">03</span>Зайди на kling.ai і згенеруй 5-секундне відео з будь-яким промптом. Безкоштовні кредити оновлюються щодня.</li>
+        <li><span class="num">04</span>Зайди на suno.ai і створи 30-секундну пісню. Напиши жанр і тему — решту зробить AI.</li>
+        <li><span class="num">05</span>Запиши в нотатках: який інструмент тебе найбільше здивував і чому. Це стане твоїм AI-стартовим набором.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="module-nav">
+    <a href="#" class="btn btn-ghost">← Модуль 1: AI навколо тебе</a>
+    <a href="#" class="btn btn-primary">Модуль 3: Промпти →</a>
+  </div>
+</div>
+
+</body>
+</html>
